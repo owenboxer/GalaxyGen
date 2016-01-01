@@ -1,5 +1,7 @@
 package galactic;
 
+import visual.GalaxyDrawer;
+
 public abstract class Galaxy{
 	public boolean satellite;
 	public int maxradius;
@@ -16,12 +18,14 @@ public abstract class Galaxy{
 	public abstract void createSectors();
 
 	public abstract void display();
+
 	public void displayDensities(){
 		double diameter = 2 * maxradius + 1;
 		int density[][] = new int[(int) diameter][(int) diameter];
 		for (int i = 0; i < diameter; i++){
 			for (int j = 0; j < diameter; j++){
-				int x = (int) (i - (0.5 * (diameter - 1))), y = (int) (j - (0.5 * (diameter - 1)));
+				// Moves galaxy to center
+				int x = (i - maxradius), y = (j - maxradius);
 				double coord[] = new double[2];
 				coord = universal.Function.cartesianToPolar(x, y);
 				double polar = coord[0], radial = coord[1];
@@ -35,10 +39,9 @@ public abstract class Galaxy{
 		
 		for (int i = 0; i < diameter; i++){
 			for (int j = 0; j < diameter; j++){
-				if (density[i][j] == 0) universal.Main.log("  ");
-				else universal.Main.log(density[i][j] + " ");
+				if (density[j][i] == 0) universal.Main.log("  ");
+				else universal.Main.log(density[j][i] + " ");
 			}
-				
 			universal.Main.log("\n");
 		}
 		
@@ -46,8 +49,10 @@ public abstract class Galaxy{
 		
 		for (int i = 0; i < 30; i++)
 			for (int j = 0; j < maxradius; j++){
-				//System.out.println("Sector[" + i + "][" + j + "] = " + sector[i][j].density);
+				// System.out.println("Sector[" + i + "][" + j + "] = " + sector[i][j].density);
 			}
+		
+		GalaxyDrawer display = new GalaxyDrawer(density);
 	}
 
 	public abstract double calcMass();

@@ -40,7 +40,7 @@ public class Main extends Galaxy{
 			circumference = 2 * Math.PI * radius;
 			offset = 0;
 			//offset = ((((universal.Function.exponentialFunction(0.7, (r / maxradius) * 10) - 0.993116))
-			//		* ((grade + 1) / radius)) * 2 * Math.PI) * 50;
+			//		* ((grade + 1) / radius)) * 2 * Math.PI) * 0.5;
 			nonarmwidth = (circumference - (armwidth * majorarms)) / majorarms;
 			y = amplitude / 2;
 			artificialyaxis = 0;
