@@ -1,0 +1,81 @@
+package galactic;
+
+public abstract class Galaxy{
+	public boolean satellite;
+	public int maxradius;
+	public double galaxymass, numberstars, galaxyage, radius1, radius2, meanradius, meandensity;
+	public String id;
+
+	structural.Sector sector[][] = null;
+
+	public Galaxy(boolean satellite){
+		this.satellite = satellite;
+	}
+
+	public abstract void initiateGalaxy();
+	public abstract void createSectors();
+
+	public abstract void display();
+	public void displayDensities(){
+		double diameter = 2 * maxradius + 1;
+		int density[][] = new int[(int) diameter][(int) diameter];
+		for (int i = 0; i < diameter; i++){
+			for (int j = 0; j < diameter; j++){
+				int x = (int) (i - (0.5 * (diameter - 1))), y = (int) (j - (0.5 * (diameter - 1)));
+				double coord[] = new double[2];
+				coord = universal.Function.cartesianToPolar(x, y);
+				double polar = coord[0], radial = coord[1];
+				polar -= polar % 12;
+				polar = polar / 12;
+				radial -= radial % 1;
+				if (radial >= maxradius) continue;
+				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
+			}
+		}
+		
+		for (int i = 0; i < diameter; i++){
+			for (int j = 0; j < diameter; j++){
+				if (density[i][j] == 0) universal.Main.log("  ");
+				else universal.Main.log(density[i][j] + " ");
+			}
+				
+			universal.Main.log("\n");
+		}
+		
+		universal.Main.log("\n");
+		
+		for (int i = 0; i < 30; i++)
+			for (int j = 0; j < maxradius; j++){
+				//System.out.println("Sector[" + i + "][" + j + "] = " + sector[i][j].density);
+			}
+	}
+
+	public abstract double calcMass();
+	public double calcNumberStars(){
+		return galaxymass - 1;
+	}
+	public abstract double calcGalaxyAge();
+	public double calcMeanRadius(){
+		double volume = Math.pow(10, galaxymass) / Math.pow(10, meandensity);
+		double radius = Math.sqrt(volume) / Math.PI;
+		radius = Math.log10(radius);
+		return radius;
+	}
+	public abstract double calcRadius1();
+	public abstract double calcRadius2();
+	public int calcMaxRadius(){
+		return 21;
+	}
+	public double calcMeanDensity(){
+		double mass = (galaxymass - 4) / .8;
+		double density = 10 - universal.Function.exponentialFunction(.9, mass);
+		density = (density / 2) - 4;
+		return density;
+	}
+
+	public abstract String getID(int id);
+
+	public static double lyToGalacticUnits(int ly){
+		return universal.Universe.lyToUniversalUnits(ly);
+	}
+}
