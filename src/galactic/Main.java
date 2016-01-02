@@ -60,7 +60,7 @@ public class Main extends Galaxy{
 
 					System.out.println("Upper Equation: x = " + x + " f = " + f + " y = " + y + " Art = " + artificialx);
 
-					if (f <= y){
+					if (f <= y + 0.005){ //accounts for Math.PI error
 						greaterthany = false;
 						artificialyaxis += armwidth;
 						System.out.println("Intercept = " + artificialyaxis);
@@ -138,8 +138,9 @@ public class Main extends Galaxy{
 		return universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
-		if (barsize == 0) return universal.Main.getRandomInt(2, 6);
-		return 2;
+		//if (barsize == 0) return universal.Main.getRandomInt(2, 6);
+		//return 2;
+		return 6;
 	}
 	public int calcMinorArms(){
 		int numarms =(int) ((2 - barsize) * majorarms * 1.5);
