@@ -4,7 +4,7 @@ import visual.GalaxyDrawer;
 
 public abstract class Galaxy{
 	public boolean satellite;
-	public int maxradius;
+	public int maxradius, maxtheta;
 	public double galaxymass, numberstars, galaxyage, radius1, radius2, meanradius, meandensity;
 	public String id;
 
@@ -29,9 +29,9 @@ public abstract class Galaxy{
 				double coord[] = new double[2];
 				coord = universal.Function.cartesianToPolar(x, y);
 				double polar = coord[0], radial = coord[1];
-				polar -= polar % 12;
-				polar = polar / 12;
-				radial -= radial % 1;
+				polar -= polar % (360.0 / maxtheta);
+				polar = polar / (360.0 / maxtheta);
+				radial = (int) radial;
 				if (radial >= maxradius) continue;
 				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
 			}
@@ -70,6 +70,9 @@ public abstract class Galaxy{
 	public abstract double calcRadius2();
 	public int calcMaxRadius(){
 		return 100;
+	}
+	public int calcMaxTheta(){
+		return 250;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;

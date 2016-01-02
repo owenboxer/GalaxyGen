@@ -23,10 +23,11 @@ public class Main extends Galaxy{
 		majorarms = calcMajorArms();
 		minorarms = calcMinorArms();
 		meandensity = calcMeanDensity();
+		maxtheta = calcMaxTheta();
 	}
 	public void createSectors(){
 
-		double density[][] = new double[30][maxradius];
+		double density[][] = new double[maxtheta][maxradius];
 		double armwidth;
 		double amplitude, circumference, offset, nonarmwidth, artificialarm, artificialnonarm;
 		double y, x = 0, f = 0, radius, polar, artificialyaxis, artificialx = 0;
@@ -38,9 +39,8 @@ public class Main extends Galaxy{
 			radius = r + 1;
 			amplitude = universal.Function.linearFunction(-0.4, (radius / maxradius) * 10) - 2;
 			circumference = 2 * Math.PI * radius;
-			offset = 0;
-			//offset = ((((universal.Function.exponentialFunction(0.7, (r / maxradius) * 10) - 0.993116))
-			//		* ((grade + 1) / radius)) * 2 * Math.PI) * 0.5;
+			offset = ((((universal.Function.exponentialFunction(0.7, (r / maxradius) * 10) - 0.993116))
+					* ((grade + 1) / radius)) * 2 * Math.PI);
 			nonarmwidth = (circumference - (armwidth * majorarms)) / majorarms;
 			y = amplitude / 2;
 			artificialyaxis = 0;
@@ -48,9 +48,9 @@ public class Main extends Galaxy{
 			artificialnonarm = 3.0 * nonarmwidth;
 			greaterthany = false;
 
-			for (polar = 0; polar < 30; polar++){
+			for (polar = 0; polar < maxtheta; polar++){
 
-				x = (polar / 30) * circumference;
+				x = (polar / maxtheta) * circumference;
 				artificialx = x - artificialyaxis;
 
 				if (greaterthany){
@@ -60,7 +60,7 @@ public class Main extends Galaxy{
 
 					System.out.println("Upper Equation: x = " + x + " f = " + f + " y = " + y + " Art = " + artificialx);
 
-					if (f <= y + 0.005){ //accounts for Math.PI error
+					if (f <= y + 0.5){ //accounts for Math.PI error
 						greaterthany = false;
 						artificialyaxis += armwidth;
 						System.out.println("Intercept = " + artificialyaxis);
@@ -88,8 +88,8 @@ public class Main extends Galaxy{
 			}
 		}
 		
-		sector = new structural.Sector[30][maxradius];
-		for (int i = 0; i < 30; i++)
+		sector = new structural.Sector[maxtheta][maxradius];
+		for (int i = 0; i < maxtheta; i++)
 			for (int j = 0; j < maxradius; j++){
 				sector[i][j] = new structural.Sector(i, j, density[i][j]);
 			}
@@ -138,9 +138,9 @@ public class Main extends Galaxy{
 		return universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
-		//if (barsize == 0) return universal.Main.getRandomInt(2, 6);
-		//return 2;
-		return 6;
+		/*if (barsize == 0) return universal.Main.getRandomInt(2, 6);
+		return 2;*/
+		return 2;
 	}
 	public int calcMinorArms(){
 		int numarms =(int) ((2 - barsize) * majorarms * 1.5);
