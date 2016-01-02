@@ -46,7 +46,7 @@ public abstract class Galaxy{
 			universal.Main.log("\n");
 		}*/
 		
-		GalaxyDrawer display = new GalaxyDrawer(density);
+		new GalaxyDrawer(density);
 	}
 
 	public abstract double calcMass();
