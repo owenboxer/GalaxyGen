@@ -20,19 +20,21 @@ public abstract class Galaxy{
 	public abstract void display();
 
 	public void displayDensities(){
-		double diameter = 2 * maxradius + 1;
+		double diameter = 400;
 		int density[][] = new int[(int) diameter][(int) diameter];
 		for (int i = 0; i < diameter; i++){
 			for (int j = 0; j < diameter; j++){
 				// Moves galaxy to center
-				int x = (i - maxradius), y = (j - maxradius);
+				int x = (i - 200), y = (j - 200);
 				double coord[] = new double[2];
 				coord = universal.Function.cartesianToPolar(x, y);
 				double polar = coord[0], radial = coord[1];
-				polar -= polar % (360.0 / maxtheta);
-				polar = polar / (360.0 / maxtheta);
+				polar -= polar % (360.0 / (maxtheta - 1));
+				polar = polar / (360.0 / (maxtheta - 1));
+				if (radial >= 200) continue;
+				radial = maxradius * (radial / 200);
 				radial = (int) radial;
-				if (radial >= maxradius) continue;
+				System.out.println("Ilen: " + sector.length + ", Jlen: " + sector[0].length);
 				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
 			}
 		}
@@ -72,7 +74,7 @@ public abstract class Galaxy{
 		return 100;
 	}
 	public int calcMaxTheta(){
-		return 250;
+		return 180;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;
