@@ -31,9 +31,14 @@ public abstract class Galaxy{
 				double polar = coord[0], radial = coord[1];
 				polar -= polar % (360.0 / (maxtheta - 1));
 				polar = polar / (360.0 / (maxtheta - 1));
+<<<<<<< HEAD
 				if (radial >= 200) continue;
 				radial = maxradius * (radial / 200);
 				radial = (int) radial;
+=======
+				radial = (int) radial;
+				if (radial >= maxradius) continue;
+>>>>>>> f4517107d09cbc11221d7c352455b1cadd0ada9f
 				System.out.println("Ilen: " + sector.length + ", Jlen: " + sector[0].length);
 				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
 			}
@@ -74,7 +79,7 @@ public abstract class Galaxy{
 		return 100;
 	}
 	public int calcMaxTheta(){
-		return 180;
+		return 181;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;
