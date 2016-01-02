@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 public class GalaxyDrawer {
 	public BufferedImage image;
-	final int rectWidth = 2;
-	final int rectHeight = 2;
+	final int rectWidth = 1;
+	final int rectHeight = 1;
 	
 	
 	public GalaxyDrawer(int[][] density) {

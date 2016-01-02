@@ -29,9 +29,10 @@ public class Main extends Galaxy{
 
 		double density[][] = new double[maxtheta][maxradius];
 		double armwidth;
-		double amplitude, circumference, offset, nonarmwidth, artificialarm, artificialnonarm;
-		double y, x = 0, f = 0, radius, polar, artificialyaxis, artificialx = 0;
-		boolean greaterthany = false;
+		double amplitude, circumference, offset, nonarmwidth, artificialarm, artificialnonarm, cutoff, 
+				radius;
+		double x = 0, predensity = 0, polar, artificialyaxis, artificialx = 0;
+		boolean greaterthancutoff = false;
 		armwidth = ((1.5 * Math.PI) + ((grade - 2.5) / 5)) / majorarms;
 
 		for (double r = 0; r < maxradius; r++){
@@ -40,28 +41,35 @@ public class Main extends Galaxy{
 			amplitude = universal.Function.linearFunction(-0.4, (radius / maxradius) * 10) - 2;
 			circumference = 2 * Math.PI * radius;
 			offset = ((((universal.Function.exponentialFunction(0.7, (r / maxradius) * 10) - 0.993116))
-					* ((grade + 1) / radius)) * 2 * Math.PI);
+					* ((grade + 1) / radius)) * 2 * Math.PI) * 0;
 			nonarmwidth = (circumference - (armwidth * majorarms)) / majorarms;
-			y = amplitude / 2;
+			cutoff = amplitude / 2;
 			artificialyaxis = 0;
 			artificialarm = 1.5 * armwidth;
 			artificialnonarm = 3.0 * nonarmwidth;
-			greaterthany = false;
+			greaterthancutoff = false;
 
 			for (polar = 0; polar < maxtheta; polar++){
 
 				x = (polar / maxtheta) * circumference;
 				artificialx = x - artificialyaxis;
 
-				if (greaterthany){
+				if (greaterthancutoff){
 
-					f = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI * 
+					predensity = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI * 
 							artificialx) / artificialarm) + Math.PI + (Math.PI * 0.333333) + offset)));
 
-					System.out.println("Upper Equation: x = " + x + " f = " + f + " y = " + y + " Art = " + artificialx);
+					System.out.println("Upper Equation: x = " + x + " f = " + predensity + " y = " + cutoff + " Art = " + artificialx);
 
-					if (f <= y + 0.5){ //accounts for Math.PI error
-						greaterthany = false;
+					if (predensity <= cutoff + 0.0005){ //accounts for Math.PI error
+						greaterthancutoff = false;
+						artificialyaxis += armwidth;
+						System.out.println("Intercept = " + artificialyaxis);
+						polar--;
+						continue;
+					}
+					if (artificialx >= armwidth){ //checks for skipping
+						greaterthancutoff = false;
 						artificialyaxis += armwidth;
 						System.out.println("Intercept = " + artificialyaxis);
 						polar--;
@@ -70,21 +78,28 @@ public class Main extends Galaxy{
 				}
 				else {
 
-					f = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI *
+					predensity = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI *
 							artificialx) / artificialnonarm) + Math.PI + (Math.PI * 1.666667) + offset)));
 
-					System.out.println("Lower Equation: x = " + x + " f = " + f + " y = " + y + " Art = " + artificialx);
+					System.out.println("Lower Equation: x = " + x + " f = " + predensity + " y = " + cutoff + " Art = " + artificialx);
 
-					if (f > y){
-						greaterthany = true;
+					if (predensity > cutoff){
+						greaterthancutoff = true;
 						artificialyaxis += nonarmwidth;
+						System.out.println("Intercept = " + artificialyaxis);
+						polar--;
+						continue;
+					}
+					if (artificialx >= nonarmwidth){
+						greaterthancutoff = true;
+						artificialyaxis += armwidth;
 						System.out.println("Intercept = " + artificialyaxis);
 						polar--;
 						continue;
 					}
 				}
 				
-				density[(int) polar][(int) r] = f;
+				density[(int) polar][(int) r] = predensity;
 			}
 		}
 		
@@ -140,7 +155,7 @@ public class Main extends Galaxy{
 	public int calcMajorArms(){
 		/*if (barsize == 0) return universal.Main.getRandomInt(2, 6);
 		return 2;*/
-		return 2;
+		return 3;
 	}
 	public int calcMinorArms(){
 		int numarms =(int) ((2 - barsize) * majorarms * 1.5);

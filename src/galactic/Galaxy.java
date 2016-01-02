@@ -20,44 +20,31 @@ public abstract class Galaxy{
 	public abstract void display();
 
 	public void displayDensities(){
-		double diameter = 400;
+		int diameter = 750, radius = diameter / 2;
 		int density[][] = new int[(int) diameter][(int) diameter];
 		for (int i = 0; i < diameter; i++){
 			for (int j = 0; j < diameter; j++){
 				// Moves galaxy to center
-				int x = (i - 200), y = (j - 200);
+				int x = (i - radius), y = (j - radius);
 				double coord[] = new double[2];
 				coord = universal.Function.cartesianToPolar(x, y);
 				double polar = coord[0], radial = coord[1];
 				polar -= polar % (360.0 / (maxtheta - 1));
 				polar = polar / (360.0 / (maxtheta - 1));
-<<<<<<< HEAD
-				if (radial >= 200) continue;
-				radial = maxradius * (radial / 200);
+				if (radial >= radius) continue;
+				radial = maxradius * (radial / radius);
 				radial = (int) radial;
-=======
-				radial = (int) radial;
-				if (radial >= maxradius) continue;
->>>>>>> f4517107d09cbc11221d7c352455b1cadd0ada9f
-				System.out.println("Ilen: " + sector.length + ", Jlen: " + sector[0].length);
 				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
 			}
 		}
 		
-		for (int i = 0; i < diameter; i++){
+		/*for (int i = 0; i < diameter; i++){
 			for (int j = 0; j < diameter; j++){
 				if (density[j][i] == 0) universal.Main.log("  ");
 				else universal.Main.log(density[j][i] + " ");
 			}
 			universal.Main.log("\n");
-		}
-		
-		universal.Main.log("\n");
-		
-		for (int i = 0; i < 30; i++)
-			for (int j = 0; j < maxradius; j++){
-				// System.out.println("Sector[" + i + "][" + j + "] = " + sector[i][j].density);
-			}
+		}*/
 		
 		GalaxyDrawer display = new GalaxyDrawer(density);
 	}
@@ -76,10 +63,10 @@ public abstract class Galaxy{
 	public abstract double calcRadius1();
 	public abstract double calcRadius2();
 	public int calcMaxRadius(){
-		return 100;
+		return 500;
 	}
 	public int calcMaxTheta(){
-		return 181;
+		return 360;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;
