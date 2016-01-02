@@ -28,7 +28,7 @@ public class Main extends Galaxy{
 
 		double density[][] = new double[30][maxradius];
 		double armwidth;
-		double amplitude, circumference, offset, nonarmwidth;
+		double amplitude, circumference, offset, nonarmwidth, artificialarm, artificialnonarm;
 		double y, x = 0, f = 0, radius, polar, artificialyaxis, artificialx = 0;
 		boolean greaterthany = false;
 		armwidth = ((1.5 * Math.PI) + ((grade - 2.5) / 5)) / majorarms;
@@ -36,7 +36,7 @@ public class Main extends Galaxy{
 		for (double r = 0; r < maxradius; r++){
 
 			radius = r + 1;
-			amplitude = universal.Function.linearFunction(-0.4, (radius / maxradius)) - 2;
+			amplitude = universal.Function.linearFunction(-0.4, (radius / maxradius) * 10) - 2;
 			circumference = 2 * Math.PI * radius;
 			offset = 0;
 			//offset = ((((universal.Function.exponentialFunction(0.7, (r / maxradius) * 10) - 0.993116))
@@ -44,6 +44,8 @@ public class Main extends Galaxy{
 			nonarmwidth = (circumference - (armwidth * majorarms)) / majorarms;
 			y = amplitude / 2;
 			artificialyaxis = 0;
+			artificialarm = 1.5 * armwidth;
+			artificialnonarm = 3.0 * nonarmwidth;
 			greaterthany = false;
 
 			for (polar = 0; polar < 30; polar++){
@@ -54,13 +56,13 @@ public class Main extends Galaxy{
 				if (greaterthany){
 
 					f = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI * 
-							artificialx) / armwidth) + Math.PI + (Math.PI * 0.333333) + offset)));
+							artificialx) / artificialarm) + Math.PI + (Math.PI * 0.333333) + offset)));
 
 					System.out.println("Upper Equation: x = " + x + " f = " + f + " y = " + y + " Art = " + artificialx);
 
 					if (f <= y){
 						greaterthany = false;
-						artificialyaxis += 0.666667 * armwidth;
+						artificialyaxis += armwidth;
 						System.out.println("Intercept = " + artificialyaxis);
 						polar--;
 						continue;
@@ -69,14 +71,14 @@ public class Main extends Galaxy{
 				else {
 
 					f = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI *
-							artificialx) / nonarmwidth) + Math.PI + (Math.PI * 1.666667) + offset)));
+							artificialx) / artificialnonarm) + Math.PI + (Math.PI * 1.666667) + offset)));
 
 					System.out.println("Lower Equation: x = " + x + " f = " + f + " y = " + y + " Art = " + artificialx);
 
 					if (f > y){
 						greaterthany = true;
-						artificialyaxis += 0.333333 * nonarmwidth;
-						//System.out.println("Intercept = " + artificialyaxis);
+						artificialyaxis += nonarmwidth;
+						System.out.println("Intercept = " + artificialyaxis);
 						polar--;
 						continue;
 					}

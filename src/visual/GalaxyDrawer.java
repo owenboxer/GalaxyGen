@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 public class GalaxyDrawer {
 	public BufferedImage image;
-	final int rectWidth = 16;
-	final int rectHeight = 16;
+	final int rectWidth = 2;
+	final int rectHeight = 2;
 	
 	
 	public GalaxyDrawer(int[][] density) {
@@ -25,8 +25,8 @@ public class GalaxyDrawer {
 						             255 * (int)density[xx][yy]/10,
 						             255 * (int)density[xx][yy]/10));
 				g.fillRect(xx * rectWidth, yy * rectHeight, rectWidth, rectHeight);
-				g.setColor(Color.BLUE);
-				g.drawString(Integer.toString(density[xx][yy]), xx * rectWidth, (yy + 1) * rectHeight);
+				//g.setColor(Color.BLUE);
+				//g.drawString(Integer.toString(density[xx][yy]), xx * rectWidth, (yy + 1) * rectHeight);
 				
 			}
 		}

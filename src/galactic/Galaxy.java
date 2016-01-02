@@ -69,7 +69,7 @@ public abstract class Galaxy{
 	public abstract double calcRadius1();
 	public abstract double calcRadius2();
 	public int calcMaxRadius(){
-		return 21;
+		return 10;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;
