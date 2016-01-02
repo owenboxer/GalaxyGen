@@ -66,7 +66,7 @@ public abstract class Galaxy{
 		return 500;
 	}
 	public int calcMaxTheta(){
-		return 360;
+		return 1440;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;
