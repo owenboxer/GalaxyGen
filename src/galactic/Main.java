@@ -167,8 +167,8 @@ public class Main extends Galaxy{
 		return universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
-		if (barsize == 0) return universal.Main.getRandomInt(3, 6);
-		return 2;
+		//if (barsize == 0) return universal.Main.getRandomInt(3, 6);
+		return 9;
 	}
 	public int calcMinorArms(){
 		int numarms =(int) ((2 - barsize) * majorarms * 1.5);
