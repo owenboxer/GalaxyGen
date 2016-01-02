@@ -29,10 +29,11 @@ public abstract class Galaxy{
 				double coord[] = new double[2];
 				coord = universal.Function.cartesianToPolar(x, y);
 				double polar = coord[0], radial = coord[1];
-				polar -= polar % (360.0 / maxtheta);
-				polar = polar / (360.0 / maxtheta);
+				polar -= polar % (360.0 / (maxtheta - 1));
+				polar = polar / (360.0 / (maxtheta - 1));
 				radial = (int) radial;
 				if (radial >= maxradius) continue;
+				System.out.println("Ilen: " + sector.length + ", Jlen: " + sector[0].length);
 				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
 			}
 		}
@@ -72,7 +73,7 @@ public abstract class Galaxy{
 		return 100;
 	}
 	public int calcMaxTheta(){
-		return 250;
+		return 181;
 	}
 	public double calcMeanDensity(){
 		double mass = (galaxymass - 4) / .8;
