@@ -8,13 +8,18 @@ public class GalaxyDrawer {
 	public BufferedImage image;
 	final int rectWidth = 1;
 	final int rectHeight = 1;
+	public static Window window = null;
 	
 	
 	public GalaxyDrawer(int[][] density) {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_RGB);
 		drawGalaxy(image,density);
-		new Window(image);
+		
+		if (window == null)
+			window = new Window(image);
+		else
+			window.setImage(image);
 	}
 	
 	private void drawGalaxy(BufferedImage image, int[][] density) {
