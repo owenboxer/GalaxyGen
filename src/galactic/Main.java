@@ -1,7 +1,7 @@
 package galactic;
 
 public class Main extends Galaxy{
-	public int numbersatellites, barsize, grade, majorarms, minorarms;
+	public int numbersatellites, barsize, majorarms, minorarms, grade;
 	public double soi;
 	
 	public Main(boolean satellite){
@@ -38,7 +38,7 @@ public class Main extends Galaxy{
 		for (double r = 0; r < maxradius; r++){
 
 			radius = r + 1;
-			amplitude = universal.Function.linearFunction(-0.4, (r / maxradius) * 10) - 2;
+			amplitude = universal.Function.linearFunction(-0.4, 8, (r / maxradius) * 10);
 			circumference = 2 * Math.PI * radius;
 			nonarmwidth = (circumference - (armwidth * majorarms)) / majorarms;
 			cutoff = amplitude / 2;
@@ -61,7 +61,7 @@ public class Main extends Galaxy{
 					predensity = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI * 
 							artificialx) / artificialarm) + Math.PI + (Math.PI * 0.333333))));
 
-					if (predensity <= cutoff + 0.0005){ //accounts for Math.PI error
+					if (predensity <= cutoff){// + 0.0005){ //accounts for Math.PI error
 						greaterthancutoff = false;
 						artificialyaxis += armwidth;
 						polar--;
@@ -97,25 +97,22 @@ public class Main extends Galaxy{
 			}
 		}
 		
-		double unmodified[] = new double[maxtheta];
-		double offset; 
-		int newvalue; 
+		double unmodified[] = new double[maxtheta], offset, newvalue; 
 		
-		for (double i = 0; i < maxradius; i++){
+		/*for (double i = 0; i < maxradius; i++){
 			for (int j = 0; j < maxtheta; j++)
 				unmodified[j] = density[j][(int) i];
 			
-			offset = ((universal.Function.exponentialFunction(0.7, (i / maxradius) * 10) 
-					- 0.993116)) * ((grade + 1) / (i + 1)) * maxradius * maxtheta * 0.01;
+			offset = i * ((grade / 6.0) + 1);
 			
-			for (int j = 0; j < maxtheta; j++){
-				newvalue = (int) offset + j;
+			for (double j = 0; j < maxtheta; j++){
+				newvalue = offset + j;
 				while(newvalue >= maxtheta) {
 					newvalue -= maxtheta;
 				}
-				density[j][(int) i] = unmodified[newvalue];
+				density[(int) j][(int) i] = unmodified[(int) newvalue];
 			}
-		}
+		}*/
 		
 		sector = new structural.Sector[maxtheta][maxradius];
 		for (int i = 0; i < maxtheta; i++)
@@ -167,8 +164,8 @@ public class Main extends Galaxy{
 		return universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
-		//if (barsize == 0) return universal.Main.getRandomInt(3, 6);
-		return 9;
+		if (barsize == 0) return universal.Main.getRandomInt(3, 8);
+		return 2;
 	}
 	public int calcMinorArms(){
 		int numarms =(int) ((2 - barsize) * majorarms * 1.5);

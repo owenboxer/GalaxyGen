@@ -14,7 +14,7 @@ public class Main {
 	public static int getRandomInt(int low, int high){
 		Random rng = new Random();
 		high++;
-		return rng.nextInt(high)+low;
+		return rng.nextInt(high - low) + low;
 	}
 	public static double getRandomDouble(double low, double high){
 		Random rng = new Random();

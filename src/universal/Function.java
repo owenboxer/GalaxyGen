@@ -18,12 +18,9 @@ public class Function {
 		return y;
 	}
 	
-	public static double linearFunction(double m, double x){
+	public static double linearFunction(double m, double b, double x){
 		double y;
-		boolean negative = false;
-		if (m < 0) negative = true;
-		y = m * x;
-		if (negative) y += 10;
+		y = (m * x) + b;
 		return y;
 	}
 
