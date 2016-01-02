@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import utility.Input;
+//import utility.Input;
 
 public class Window {
 	JFrame frame;
@@ -23,7 +23,7 @@ public class Window {
 		frame.add(label);
 		frame.pack();
 		frame.setVisible(true);
-		frame.addKeyListener(new Input());
+		//frame.addKeyListener(new Input());
 	}
 	
 	public void close() {

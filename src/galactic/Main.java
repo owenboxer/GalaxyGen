@@ -33,12 +33,12 @@ public class Main extends Galaxy{
 				radius;
 		double x = 0, predensity = 0, polar, artificialyaxis, artificialx = 0;
 		boolean greaterthancutoff = false;
-		armwidth = ((1.5 * Math.PI) + ((grade - 2.5) / 5)) / majorarms;
+		armwidth = (maxradius + (grade / 5)) / majorarms;
 
 		for (double r = 0; r < maxradius; r++){
 
 			radius = r + 1;
-			amplitude = universal.Function.linearFunction(-0.4, (radius / maxradius) * 10) - 2;
+			amplitude = universal.Function.linearFunction(-0.4, (r / maxradius) * 10) - 2;
 			circumference = 2 * Math.PI * radius;
 			nonarmwidth = (circumference - (armwidth * majorarms)) / majorarms;
 			cutoff = amplitude / 2;
@@ -46,8 +46,12 @@ public class Main extends Galaxy{
 			artificialarm = 1.5 * armwidth;
 			artificialnonarm = 3.0 * nonarmwidth;
 			greaterthancutoff = false;
+			
+			if (armwidth * majorarms > circumference)
+				for (polar = 0; polar < maxtheta; polar++)
+					density[(int) polar][(int) r] = amplitude * 1.25;
 
-			for (polar = 0; polar < maxtheta; polar++){
+			else for (polar = 0; polar < maxtheta; polar++){
 
 				x = (polar / maxtheta) * circumference;
 				artificialx = x - artificialyaxis;
@@ -102,7 +106,7 @@ public class Main extends Galaxy{
 				unmodified[j] = density[j][(int) i];
 			
 			offset = ((universal.Function.exponentialFunction(0.7, (i / maxradius) * 10) 
-					- 0.993116)) * ((grade + 1) / (i + 1)) * 2 * Math.PI * maxradius * 2;
+					- 0.993116)) * ((grade + 1) / (i + 1)) * maxradius * maxtheta * 0.01;
 			
 			for (int j = 0; j < maxtheta; j++){
 				newvalue = (int) offset + j;
