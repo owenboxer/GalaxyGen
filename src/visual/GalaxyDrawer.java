@@ -25,14 +25,10 @@ public class GalaxyDrawer {
 
 	private void drawGalaxy(BufferedImage image, int[][] density) {
 		Graphics2D g = (Graphics2D) image.getGraphics();
-		
-		float hue = (new Random()).nextFloat();
+		float hue = (new Random()).nextFloat();// Random hue, just for fun.
 		for(int xx = 0; xx < density.length; xx++) {
 			for(int yy = 0; yy < density[xx].length; yy++) {
 				g.setColor(Color.getHSBColor(hue, 1, (float)density[xx][yy]/10));
-						/*new Color(255 * (int)density[xx][yy]/10,
-						             255 * (int)density[xx][yy]/10,
-						             255 * (int)density[xx][yy]/10));*/
 				g.fillRect(xx * rectWidth, yy * rectHeight, rectWidth, rectHeight);
 				//g.setColor(Color.BLUE);
 				//g.drawString(Integer.toString(density[xx][yy]), xx * rectWidth, (yy + 1) * rectHeight);
