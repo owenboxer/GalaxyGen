@@ -2,15 +2,17 @@ package utility;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import universal.Main;
 import visual.GalaxyDrawer;
+import visual.ImageHandler;
 
 public class Input extends KeyAdapter implements Runnable {
 	static int keyP;
 	static int keyR;
-	
-	
+
+
 	public Input() {
 		Thread thread = new Thread(this);
 		thread.start();
@@ -46,6 +48,13 @@ public class Input extends KeyAdapter implements Runnable {
 				//GalaxyDrawer.window.close();
 				Main.universe.initiateUniverse();
 				keyP = 0;
+			}
+			if (keyP == KeyEvent.VK_S) {
+				int i = 0;
+				while((new File("screenshots/screenshot" + i + ".png")).exists()) {
+					i++;
+				}
+				ImageHandler.writeImage(GalaxyDrawer.image, "png", "screenshots/screenshot" + i + ".png");
 			}
 		}
 	}
