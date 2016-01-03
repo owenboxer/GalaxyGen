@@ -21,7 +21,7 @@ public abstract class Galaxy{
 
 	public void displayDensities(){
 		int diameter = 750, radius = diameter / 2;
-		int density[][] = new int[(int) diameter][(int) diameter];
+		double density[][] = new double[(int) diameter][(int) diameter];
 		for (int i = 0; i < diameter; i++){
 			for (int j = 0; j < diameter; j++){
 				// Moves galaxy to center
@@ -33,8 +33,7 @@ public abstract class Galaxy{
 				polar = polar / (360.0 / (maxtheta - 1));
 				if (radial >= radius) continue;
 				radial = maxradius * (radial / radius);
-				radial = (int) radial;
-				density[i][j] = (int) sector[(int) polar][(int) radial].rawdensity;
+				density[i][j] = sector[(int) polar][(int) radial].rawdensity;
 			}
 		}
 		
