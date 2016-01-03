@@ -99,7 +99,7 @@ public class Main extends Galaxy{
 		
 		double unmodified[] = new double[maxtheta], offset, newvalue; 
 		
-		/*for (double i = 0; i < maxradius; i++){
+		for (double i = 0; i < maxradius; i++){
 			for (int j = 0; j < maxtheta; j++)
 				unmodified[j] = density[j][(int) i];
 			
@@ -112,7 +112,7 @@ public class Main extends Galaxy{
 				}
 				density[(int) j][(int) i] = unmodified[(int) newvalue];
 			}
-		}*/
+		}
 		
 		sector = new structural.Sector[maxtheta][maxradius];
 		for (int i = 0; i < maxtheta; i++)
