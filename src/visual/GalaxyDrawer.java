@@ -10,7 +10,6 @@ public class GalaxyDrawer {
 	final int rectWidth = 1;
 	final int rectHeight = 1;
 	public static Window window = null;
-	private float angle = 0;
 
 	public static String message = "";// DEBUG/UTILITY ONLY
 
@@ -18,12 +17,14 @@ public class GalaxyDrawer {
 	public GalaxyDrawer(double[][] density) {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_ARGB);
-		BufferedImage fogImage = ImageHandler.loadImage("/Fog1.png");
 		BufferedImage background = new BufferedImage(image.getWidth(),image.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 		
-		drawBackground(background);
-		drawGalaxy(image, density, fogImage);
+		BufferedImage fogImage1 = ImageHandler.loadImage("/Fog1.png");
+		BufferedImage fogImage2 = ImageHandler.loadImage("/GalaxyCluster1.png");
+		
+		drawBackground(background, fogImage2);
+		drawGalaxy(image, density, fogImage1);
 		//drawGalaxyOLD(image, density);
 		Graphics2D g = (Graphics2D)background.getGraphics();
 		g.drawImage(image, 0, 0,null);
@@ -36,7 +37,7 @@ public class GalaxyDrawer {
 
 	private void drawGalaxy(BufferedImage image, double[][] density, BufferedImage fog) {
 		Graphics2D g = (Graphics2D)image.getGraphics();
-		drawFogLayer(image, fog, g);
+		drawFogLayer(image, fog,1f, g);
 		cutColorGalaxy(image, density, g);
 	}
 
@@ -47,18 +48,11 @@ public class GalaxyDrawer {
 		float distance,
 			  maxDist = (float)image.getWidth() / 2;// TEMPORARY. Just a non-official way to define the radius.
 
-		// TEMPORARY FIX
-		int offsetx = 0, 
-			offsety = 0;
 
 		for(int xx = 0; xx < density.length; xx++)
 			for(int yy = 0; yy < density[xx].length; yy++) {
-				xx -= offsetx;// Translation
-				yy -= offsety;// Translation
 				distance = (float) Math.sqrt(Math.pow((xx * rectWidth) - maxDist * rectWidth, 2)
 											+ Math.pow((yy * rectHeight) - maxDist* rectHeight, 2));
-				xx += offsetx;// UNTranslation
-				yy += offsety;// UNTranslation
 				if (distance > maxDist) distance = maxDist;
 				
 				int[] rgbArray = colorify(new Color(image.getRGB(xx,yy)), (float)Math.pow(distance,1.2) / maxDist,
@@ -67,6 +61,10 @@ public class GalaxyDrawer {
 
 				int alpha =  (int) (255 * ((1.0f - (distance / maxDist)) * 
 						((float)density[xx][yy] - 1.0f) / 10.0f));
+				
+				// THE FUNCTION BELOW makes the alpha distribution better
+				alpha = (int) (255f * (1f - Math.pow((float)alpha/255f - 1, 6)));
+				
 				int rgb = (alpha << 24) | (rgbArray[0] << 16) | (rgbArray[1] << 8) | rgbArray[2];
 				image.setRGB(xx,yy,rgb);
 			}
@@ -88,28 +86,43 @@ public class GalaxyDrawer {
 		}
 	}
 	
-	private void drawFogLayer(BufferedImage img, BufferedImage fog, Graphics2D g) {
+	private void drawFogLayer(BufferedImage img, BufferedImage fog,float alpha, Graphics2D g) {
 
-		int w = img.getWidth() / fog.getWidth();
-		int h = img.getHeight() / fog.getHeight();
+		int w = img.getWidth() / fog.getWidth() + 1;
+		int h = img.getHeight() / fog.getHeight() + 1;
 		int width = fog.getWidth();
 		int height = fog.getHeight();
+		
+		// Makes fog placement random, and as a result the Galaxies more random.
+		int xOffset = (int)(width * Math.random());
+		int yOffset = (int)(height * Math.random());
+		
+		g.setComposite(AlphaComposite.SrcOver.derive(alpha));
 		for(int xx = 0; xx <= w; xx++)
 			for(int yy = 0; yy <= h; yy++) {
-				g.drawImage(fog, xx * width, yy * height, width, height, null);
+				g.drawImage(fog, xx * width - xOffset, yy * height - yOffset, width, height, null);
 			}
 	}
 	
-	private void drawBackground(BufferedImage img) {
+	private void drawBackground(BufferedImage img, BufferedImage fog) {
 		Graphics2D g = (Graphics2D) img.getGraphics();
-		g.setColor(Color.RED);
-		g.drawRect(0, 0, img.getWidth(), img.getHeight());
-		g.dispose();
+		float alpha = 0.0f;
+		drawFogLayer(img, fog,1f - alpha, g);
+		Color col = Color.BLACK;
+		int rgb = (0 << 150) | (col.getRed() << 16) | (col.getGreen() << 8) | col.getBlue();
+		col = new Color(rgb);
+		g.setColor(col);
+		
+        g.setComposite(AlphaComposite.SrcOver.derive(alpha));
+		g.fillRect(0, 0, img.getWidth(), img.getHeight());
+		//g.dispose();
 		 
 	}
 	
 	private int[] colorify(Color original,float colPercent,
 			Color col1, Color col2) {
+		//Used to merge two colors onto an image color.
+		
 		// colPercent defines the separation btwn the colors.
 		float originalPercent = 0.6f;// %  Combining merged col1+col2 and the image color
 		
