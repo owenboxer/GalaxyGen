@@ -17,16 +17,20 @@ public class GalaxyDrawer {
 
 	public GalaxyDrawer(double[][] density) {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
-				BufferedImage.TYPE_INT_RGB);
+				BufferedImage.TYPE_INT_ARGB);
 		BufferedImage fogImage = ImageHandler.loadImage("/Fog1.png");
-
-		//drawGalaxy(image, density, fogImage);
-		drawGalaxyOLD(image, density);
-
+		BufferedImage background = new BufferedImage(image.getWidth(),image.getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
+		
+		drawBackground(background);
+		drawGalaxy(image, density, fogImage);
+		//drawGalaxyOLD(image, density);
+		Graphics2D g = (Graphics2D)background.getGraphics();
+		g.drawImage(image, 0, 0,null);
 		if (window == null) // When restarting, you don't want to make a new window!
-			window = new Window(image);
+			window = new Window(background);
 		else
-			window.setImage(image);
+			window.setImage(background);
 	}
 
 
@@ -35,19 +39,18 @@ public class GalaxyDrawer {
 		drawFogLayer(image, fog, g);
 		cutColorGalaxy(image, density, g);
 	}
-	
+
 	private void cutColorGalaxy(BufferedImage image, double[][] density, Graphics2D g) {
-		
 		// Color stuff
-		Color col1 = Color.YELLOW;//new Color(250,255,189);// yellowish
-		Color col2 = Color.BLUE;//new Color(166,220,255);// blueish
+		Color col1 = Color.getHSBColor((float)Math.random(), 1, 1);//Color.YELLOW;//new Color(250,255,189);// yellowish
+		Color col2 = Color.getHSBColor((float)Math.random(), 1, 1);//Color.BLUE;//new Color(166,220,255);// blueish
 		float distance,
 			  maxDist = (float)image.getWidth() / 2;// TEMPORARY. Just a non-official way to define the radius.
-		
+
 		// TEMPORARY FIX
 		int offsetx = 0, 
 			offsety = 0;
-		
+
 		for(int xx = 0; xx < density.length; xx++)
 			for(int yy = 0; yy < density[xx].length; yy++) {
 				xx -= offsetx;// Translation
@@ -58,19 +61,17 @@ public class GalaxyDrawer {
 				yy += offsety;// UNTranslation
 				if (distance > maxDist) distance = maxDist;
 				
-				image.setRGB(xx, yy, colorify(new Color(image.getRGB(xx,yy)), (float)Math.pow(distance,1.2) / maxDist,
-						col1, col2));
-				g.setComposite(AlphaComposite.getInstance (AlphaComposite.SRC_OVER));
-				if (density[xx][yy] <= 1.0) {
-					g.setColor(new Color(0,0,0,1.0f));
-				} else {
-					g.setColor(new Color(0,0,0,1.0f - ((1.0f - (distance / maxDist)) * 
-								((float)density[xx][yy] - 1.0f) / 10.0f) ));
-				}
-				g.fillRect(xx * rectWidth, yy * rectHeight, rectWidth, rectHeight);
+				int[] rgbArray = colorify(new Color(image.getRGB(xx,yy)), (float)Math.pow(distance,1.2) / maxDist,
+						col1, col2);
+				// Just the RGB array, without alpha.
+
+				int alpha =  (int) (255 * ((1.0f - (distance / maxDist)) * 
+						((float)density[xx][yy] - 1.0f) / 10.0f));
+				int rgb = (alpha << 24) | (rgbArray[0] << 16) | (rgbArray[1] << 8) | rgbArray[2];
+				image.setRGB(xx,yy,rgb);
 			}
 	}
-	
+
 	private void drawGalaxyOLD(BufferedImage image, double[][] density) {
 		/// FOR DEBUGING AND EARLY DEVELOPMENT.
 
@@ -99,7 +100,15 @@ public class GalaxyDrawer {
 			}
 	}
 	
-	private int colorify(Color original,float colPercent,
+	private void drawBackground(BufferedImage img) {
+		Graphics2D g = (Graphics2D) img.getGraphics();
+		g.setColor(Color.RED);
+		g.drawRect(0, 0, img.getWidth(), img.getHeight());
+		g.dispose();
+		 
+	}
+	
+	private int[] colorify(Color original,float colPercent,
 			Color col1, Color col2) {
 		// colPercent defines the separation btwn the colors.
 		float originalPercent = 0.6f;// %  Combining merged col1+col2 and the image color
@@ -108,7 +117,7 @@ public class GalaxyDrawer {
 		Color actualCol = VisualFunction.combineColorsHue(original, 
 							VisualFunction.combineColorsRGB(col1, col2, colPercent),
 							originalPercent);
-		return actualCol.getRGB();
+		return new int[] {actualCol.getRed(), actualCol.getGreen(),actualCol.getBlue()};
 		
 		
 	}
