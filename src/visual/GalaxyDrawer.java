@@ -6,21 +6,23 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class GalaxyDrawer {
-	public BufferedImage image;
+	public static BufferedImage image;
 	final int rectWidth = 1;
 	final int rectHeight = 1;
 	public static Window window = null;
 	private float angle = 0;
 	
-	
+	public static String message = "";// DEBUG/UTILITY ONLY
+
+
 	public GalaxyDrawer(double[][] density) {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_RGB);
 		BufferedImage fogImage = ImageHandler.loadImage("/Fog1.png");
+
 		//drawGalaxy(image, density, fogImage);
 		drawGalaxyOLD(image, density);
-		
-		
+
 		if (window == null) // When restarting, you don't want to make a new window!
 			window = new Window(image);
 		else
