@@ -9,6 +9,9 @@ public class Main extends Galaxy{
 		getID(0);
 	}
 
+	public void initiateClone(){
+		
+	}
 	public void initiateGalaxy() {
 		galaxymass = calcMass();
 		numberstars = calcNumberStars();
@@ -30,9 +33,9 @@ public class Main extends Galaxy{
 		double density[][] = new double[maxtheta][maxradius];
 		double armwidth;
 		double amplitude, circumference, nonarmwidth, artificialarm, artificialnonarm, cutoff, 
-				radius;
-		double x = 0, predensity = 0, polar, artificialyaxis, artificialx = 0;
-		boolean greaterthancutoff = false;
+				radius, startingpoint, centeramplitude, centerlength;
+		double x = 0, predensity = 0, polar, artificialyaxis, artificialx;
+		boolean greaterthancutoff, pastfirstlower;
 		armwidth = (maxradius + (grade / 5)) / majorarms;
 
 		for (double r = 0; r < maxradius; r++){
@@ -46,22 +49,32 @@ public class Main extends Galaxy{
 			artificialarm = 1.5 * armwidth;
 			artificialnonarm = 3.0 * nonarmwidth;
 			greaterthancutoff = false;
+			pastfirstlower = false;
+			
+			//finding starting point so that the peaks of the upper cosine functions line up
+			startingpoint = nonarmwidth - (((Math.PI * radius) / majorarms) - 
+					(0.5 * armwidth));
 			
 			if (armwidth * majorarms > circumference)
 				for (polar = 0; polar < maxtheta; polar++)
-					density[(int) polar][(int) r] = amplitude * 1.25;
+					density[(int) polar][(int) r] = 0;
 
 			else for (polar = 0; polar < maxtheta; polar++){
 
 				x = (polar / maxtheta) * circumference;
-				artificialx = x - artificialyaxis;
+				
+				if (!pastfirstlower) artificialx = startingpoint + x;
+				else artificialx = x - artificialyaxis;
 
 				if (greaterthancutoff){
 
 					predensity = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI * 
-							artificialx) / artificialarm) + Math.PI + (Math.PI * 0.333333))));
+							artificialx) / artificialarm) + Math.PI + (Math.PI * 0.333334))));
 
-					if (predensity <= cutoff){// + 0.0005){ //accounts for Math.PI error
+					//System.out.println("Upper Equation: x = " + x + " artx = " + artificialx + 
+							//" density = " + predensity + " cutoff = " + cutoff);
+
+					if (predensity <= cutoff){
 						greaterthancutoff = false;
 						artificialyaxis += armwidth;
 						polar--;
@@ -79,15 +92,20 @@ public class Main extends Galaxy{
 					predensity = (0.75 * amplitude) + (0.5 * amplitude * (Math.cos(((2 * Math.PI *
 							artificialx) / artificialnonarm) + Math.PI + (Math.PI * 1.666667))));
 
+					//System.out.println("Lower Equation: x = " + x + " artx = " + artificialx + 
+							//" density = " + predensity + " cutoff = " + cutoff);
+
 					if (predensity > cutoff){
 						greaterthancutoff = true;
-						artificialyaxis += nonarmwidth;
+						if (!pastfirstlower) artificialyaxis += startingpoint;
+						else artificialyaxis += nonarmwidth;
 						polar--;
+						pastfirstlower = true;
 						continue;
 					}
 					if (artificialx >= nonarmwidth){
 						greaterthancutoff = true;
-						artificialyaxis += armwidth;
+						artificialyaxis += nonarmwidth;
 						polar--;
 						continue;
 					}
@@ -97,9 +115,13 @@ public class Main extends Galaxy{
 			}
 		}
 		
-		double unmodified[] = new double[maxtheta], offset, newvalue; 
+		//fixing galactic center
 		
-		/*for (double i = 0; i < maxradius; i++){
+		
+		
+		double unmodified[] = new double[maxtheta], offset, newvalue; 
+
+		for (double i = 0; i < maxradius; i++){
 			for (int j = 0; j < maxtheta; j++)
 				unmodified[j] = density[j][(int) i];
 			
@@ -112,8 +134,8 @@ public class Main extends Galaxy{
 				}
 				density[(int) j][(int) i] = unmodified[(int) newvalue];
 			}
-		}*/
-		
+		}
+
 		sector = new structural.Sector[maxtheta][maxradius];
 		for (int i = 0; i < maxtheta; i++)
 			for (int j = 0; j < maxradius; j++){

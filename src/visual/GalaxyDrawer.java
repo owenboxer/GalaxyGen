@@ -12,7 +12,7 @@ public class GalaxyDrawer {
 	public static Window window = null;
 	
 	
-	public GalaxyDrawer(int[][] density) {
+	public GalaxyDrawer(double[][] density) {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_RGB);
 		drawGalaxy(image,density);
@@ -23,7 +23,7 @@ public class GalaxyDrawer {
 			window.setImage(image);
 	}
 
-	private void drawGalaxy(BufferedImage image, int[][] density) {
+	private void drawGalaxy(BufferedImage image, double[][] density) {
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		float hue = (new Random()).nextFloat();// Random hue, just for fun.
 		for(int xx = 0; xx < density.length; xx++) {

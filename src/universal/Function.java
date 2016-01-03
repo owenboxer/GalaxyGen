@@ -73,48 +73,9 @@ public class Function {
 		return cartesian;
 	}
 	public static double[] cartesianToPolar(double x, double y){
-		/*byte quadrant = 0;
-		
-		if (x >= 0 && y > 0) quadrant = 1;
-		else if (x <= 0 && y > 0) quadrant = 2;
-		else if (x < 0 && y <= 0) quadrant = 3;
-		else if (x > 0 && y <= 0) quadrant = 4;
-		
-		double x2 = x, y2 = y;
-		
-		switch(quadrant){
-		case 2:
-			y2 = -1 * x;
-			x2 = y;
-			break;
-		case 3:
-			x2 = -1 * x;
-			y2 = -1 * y;
-			break;
-		case 4:
-			x2 = -1 * y;
-			y2 = x;
-			break;
-		}
-		*/
 		double polar[] = new double[2];
-		//if (x2 == 0) polar[0] = 0;
-		//else if (y2 == 0) polar[0] = 0;
 		polar[0] = Math.toDegrees(Math.atan2(y, x)) + 180;
-		//else polar[0] = Math.toDegrees(Math.atan(y2 / x2));
-		/*switch (quadrant){
-		case 2:
-			polar[0] += 90;
-			break;
-		case 3:
-			polar[0] += 180;
-			break;
-		case 4:
-			polar[0] += 270;
-			break;
-		}*/
 		polar[1] = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-		//System.out.println("X = " + x + " Y = " + y + "\nP = " + polar[0] + " R = " + polar[1]);
 		return polar;
 	}
 }
