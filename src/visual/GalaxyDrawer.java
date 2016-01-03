@@ -43,8 +43,20 @@ public class GalaxyDrawer {
 
 	private void cutColorGalaxy(BufferedImage image, double[][] density, Graphics2D g) {
 		// Color stuff
-		Color col1 = Color.getHSBColor((float)Math.random(), 1, 1);//Color.YELLOW;//new Color(250,255,189);// yellowish
-		Color col2 = Color.getHSBColor((float)Math.random(), 1, 1);//Color.BLUE;//new Color(166,220,255);// blueish
+		
+		
+		// These variables exist to prevent sharp edges when going from red to blu
+		float hue1 = (float)Math.random();
+		float hue2;
+		if (hue1 > 0.5) {
+			hue2 = 0.5f + 0.5f * (float)Math.random();
+		}else {
+			hue2 = 0.5f * (float)Math.random();
+		}
+		
+		Color col1 = Color.getHSBColor(hue1, 1, 1);//Color.YELLOW;//new Color(250,255,189);// yellowish
+		Color col2 = Color.getHSBColor(hue2, 1, 1);//Color.BLUE;//new Color(166,220,255);// blueish
+		System.out.println("HUE1: " + hue1 + ", HUE2: " + hue2);
 		float distance,
 			  maxDist = (float)image.getWidth() / 2;// TEMPORARY. Just a non-official way to define the radius.
 
