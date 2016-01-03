@@ -19,8 +19,9 @@ public class GalaxyDrawer {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_RGB);
 		BufferedImage fogImage = ImageHandler.loadImage("/Fog1.png");
-		drawGalaxy(image, density, fogImage);
 
+		//drawGalaxy(image, density, fogImage);
+		drawGalaxyOLD(image, density);
 
 		if (window == null) // When restarting, you don't want to make a new window!
 			window = new Window(image);

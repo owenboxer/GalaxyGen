@@ -115,9 +115,31 @@ public class Main extends Galaxy{
 			}
 		}
 		
-		//fixing galactic center
+		//tapering arms in center
+		double centerdefinition = 0;
+		for (int i = 0; i < maxradius; i++){
+			if (density[0][i] == 0) continue;
+			centerdefinition = i;
+			break;
+		}
+		double slope;
+		for (int i = 0; i < maxtheta; i++){
+			slope = -1 * ((10 - density[i][(int) centerdefinition]) / 10);
+			for (double j = 0; j < centerdefinition; j++){
+				predensity = universal.Function.linearFunction(slope, 10, (j / centerdefinition) * 10);
+				density[i][(int) j] = predensity;
+			}
+		}
 		
-		
+		//bulge at center
+		for (double i = 0; i < centerdefinition + (maxradius / 10); i++)
+			for (int j = 0; j < maxtheta; j++){
+				predensity = 5 + (5 * Math.sin((Math.PI * (((i / (centerdefinition + (maxtheta / 10))) 
+						* 10) + 1)) / 10 + Math.PI * 0.5));
+				//System.out.println("Predensity = " + predensity);
+				if (density[j][(int) i] > predensity) continue;
+				//density[j][(int) i] = predensity;
+			}
 		
 		double unmodified[] = new double[maxtheta], offset, newvalue; 
 
