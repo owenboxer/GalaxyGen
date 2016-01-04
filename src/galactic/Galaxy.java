@@ -20,27 +20,16 @@ public abstract class Galaxy{
 	public abstract void display();
 
 	public void displayDensities(){
-		int diameter = 750, radius = diameter / 2;
-		double density[][] = new double[(int) diameter][(int) diameter];
-		for (int i = 0; i < diameter; i++){
-			for (int j = 0; j < diameter; j++){
-				// Moves galaxy to center
-				int x = (i - radius), y = (j - radius);
-				double coord[] = new double[2];
-				coord = universal.Function.cartesianToPolar(x, y);
-				double polar = coord[0], radial = coord[1];
-				polar -= polar % (360.0 / (maxtheta - 1));
-				polar = polar / (360.0 / (maxtheta - 1));
-				if (radial >= radius) continue;
-				radial = maxradius * (radial / radius);
-				density[i][j] = sector[(int) polar][(int) radial].rawdensity;
-			}
-		}
+		double density[][] = new double[maxtheta][maxradius];
+		for (int i = 0; i < maxtheta; i++)
+			for (int j = 0; j < maxradius; j++)
+				density[i][j] = sector[i][j].rawdensity;
+		density = convertToCartesian(density, 750);
 		
-		/*for (int i = 0; i < diameter; i++){
-			for (int j = 0; j < diameter; j++){
+		/*for (int i = 0; i < density.length; i++){
+			for (int j = 0; j < density.length; j++){
 				if (density[j][i] == 0) universal.Main.log("  ");
-				else universal.Main.log(density[j][i] + " ");
+				else universal.Main.log((int) density[j][i] + " ");
 			}
 			universal.Main.log("\n");
 		}*/
@@ -48,6 +37,46 @@ public abstract class Galaxy{
 		new GalaxyDrawer(density);
 	}
 
+	public double[][] convertToCartesian(double[][] polar, int resolution){
+		int radius = resolution / 2;
+		double cartesian[][] = new double[resolution][resolution];
+		int x, y;
+		double coord[] = new double[2], theta, radial;
+		for (int i = 0; i < resolution; i++)
+			for (int j = 0; j < resolution; j++){
+				// Moves galaxy to center
+				x = (i - radius);
+				y = (j - radius);
+				coord = universal.Function.cartesianToPolar(x, y);
+				theta = coord[0];
+				radial = coord[1];
+				theta -= theta % (360.0 / (maxtheta - 1));
+				theta = theta / (360.0 / (maxtheta - 1));
+				if (radial >= radius) continue;
+				radial = maxradius * (radial / radius);
+				cartesian[j][i] = polar[(int) theta][(int) radial];
+			}
+		
+		return cartesian;
+	}
+	public double[][] convertToPolar(double[][] cartesian){
+		double polar[][] = new double[maxtheta][maxradius];
+		double coord[] = new double[2], x, y;
+		for (int i = 0; i < maxradius; i++)
+			for (double j = 0; j < maxtheta; j++){
+				x = maxtheta;
+				coord = universal.Function.polarToCartesian(j / (x / 360.0), i);
+				x = coord[0];
+				y = coord[1];
+				x = (0.5 * cartesian.length) * (x / maxradius);
+				y = (0.5 * cartesian.length) * (y / maxradius);
+				x += (0.5 * cartesian.length);
+				y += (0.5 * cartesian.length);
+				polar[(int) j][i] = cartesian[(int) x][(int) y];
+			}
+		return polar;
+	}
+	
 	public abstract double calcMass();
 	public double calcNumberStars(){
 		return galaxymass - 1;

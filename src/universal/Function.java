@@ -35,41 +35,9 @@ public class Function {
 	}
 	
 	public static double[] polarToCartesian(double p, double r){
-		byte quadrant;
-		if (p < 90) quadrant = 1;
-		else if (p < 180){
-			quadrant = 2;
-			p -= 90;
-		}
-		else if (p < 270){
-			quadrant = 3;
-			p -= 180;
-		}
-		else {
-			quadrant = 4;
-			p -= 270;
-		}
-		
-		double cartesian[] = new double[2], x = r * Math.sin(p), y = r * Math.cos(p);
-		switch(quadrant){
-		case 1:
-			cartesian[0] = x;
-			cartesian[1] = y;
-			break;
-		case 2:
-			cartesian[0] = -1 * y;
-			cartesian[1] = x;
-			break;
-		case 3:
-			cartesian[0] = -1 * x;
-			cartesian[1] = -1 * y;
-			break;
-		case 4:
-			cartesian[0] = y;
-			cartesian[1] = -1 * x;
-			break;
-		}
-		
+		double cartesian[] = new double[2];
+		cartesian[0] = r * Math.cos(Math.toRadians(p));
+		cartesian[1] = r * Math.sin(Math.toRadians(p));
 		return cartesian;
 	}
 	public static double[] cartesianToPolar(double x, double y){
@@ -77,5 +45,13 @@ public class Function {
 		polar[0] = Math.toDegrees(Math.atan2(y, x)) + 180;
 		polar[1] = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 		return polar;
+	}
+	public static double[] stretch(double x, double y, double scalexaxis, double scaleyaxis, int zero) {
+		double coord[] = new double[2];
+		x += zero;
+		coord[0] = x * scalexaxis;
+		coord[1] = y * scaleyaxis;
+		x -= zero;
+		return coord;
 	}
 }
