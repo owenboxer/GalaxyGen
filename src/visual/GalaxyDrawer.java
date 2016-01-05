@@ -24,8 +24,8 @@ public class GalaxyDrawer {
 		BufferedImage fogImage2 = ImageHandler.loadImage("/GalaxyCluster1.png");
 		
 		drawBackground(background, fogImage2);
-		drawGalaxy(image, density, fogImage1);
-		//drawGalaxyOLD(image, density);
+		//drawGalaxy(image, density, fogImage1);
+		drawGalaxyOLD(image, density);
 		Graphics2D g = (Graphics2D)background.getGraphics();
 		g.drawImage(image, 0, 0,null);
 		if (window == null) // When restarting, you don't want to make a new window!
