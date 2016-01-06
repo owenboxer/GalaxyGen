@@ -58,7 +58,7 @@ public class Main extends Galaxy{
 
 		double density[][] = new double[maxtheta][maxradius];
 		double armwidth = (maxradius + (grade / 5)) / majorarms; //armwidth remains constant
-		if (barsize == 1) armwidth = 0.8 * armwidth;
+		if (barsize == 1) armwidth = 0.75 * armwidth;
 		else if (barsize == 2) armwidth = 0.9 * armwidth;
 		double amplitude, circumference, nonarmwidth, artificialarm, artificialnonarm, cutoff, 
 				radius, startingpoint; //these variables change with radius
@@ -196,7 +196,7 @@ public class Main extends Galaxy{
 			
 			//offsetting arm origin
 			double temp[][] = arm1, barlength;
-			if (barsize == 1) barlength = 0.15;
+			if (barsize == 1) barlength = 0.12;
 			else barlength = 0.25 ;
 			arm1 = new double[(int) (resolution * (barlength + 1))][(int) (resolution * 1.5)];
 			
@@ -231,10 +231,14 @@ public class Main extends Galaxy{
 			
 			//finds space for bar
 			int barxlimit = 0, barylimit = 0;
+			double checklimit = 0;
 			boolean broke = false;
 			
+			if (barsize == 1) checklimit = 0.55;
+			else checklimit = 0.6;
+			
 			for (int xx = (int) (0.5 * resolution); xx < resolution; xx++){
-				for (int yy = (int) (0.5 * resolution); yy < 0.6 * resolution; yy++)
+				for (int yy = (int) (0.5 * resolution); yy < checklimit * resolution; yy++)
 					if (density[xx][yy] > 0){ 
 						barylimit = (yy - (int) (0.5 * resolution));
 						broke = true;
@@ -294,8 +298,8 @@ public class Main extends Galaxy{
 				unmodified[j] = raw[j][(int) i];
 			
 			offset = i * ((grade / 6.0) + 1);
-			if (barsize == 2) offset = offset / 2.4;
-			if (barsize == 1) offset = offset / 1.575;
+			if (barsize == 2) offset = offset / 2;
+			if (barsize == 1) offset = offset / 1.2;
 			offset = (offset / 100) * 150;
 			
 			for (double j = 0; j < maxtheta; j++){
@@ -329,10 +333,10 @@ public class Main extends Galaxy{
 		return numsat;
 	}
 	public int calcBarSize(){
-		return universal.Main.getRandomInt(0, 2);
+		return 1;//universal.Main.getRandomInt(0, 2);
 	}
 	public int calcGrade(){
-		return universal.Main.getRandomInt(0, 5);
+		return 5;//universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
 		if (barsize == 0) return universal.Main.getRandomInt(3, 8);
