@@ -166,6 +166,8 @@ public class Main extends Galaxy{
 			}
 		}
 		
+		double temp[][];
+		
 		//adding bar
 		if (barsize > 0){
 			
@@ -195,9 +197,11 @@ public class Main extends Galaxy{
 			arm1 = convertToCartesian(arm1, (int) resolution);
 			
 			//offsetting arm origin
-			double temp[][] = arm1, barlength;
+			double barlength;
 			if (barsize == 1) barlength = 0.12;
-			else barlength = 0.25 ;
+			else barlength = 0.25;
+			
+			temp = arm1;
 			arm1 = new double[(int) (resolution * (barlength + 1))][(int) (resolution * 1.5)];
 			
 			for (int xx = 0; xx < (int) resolution; xx++){
@@ -282,6 +286,73 @@ public class Main extends Galaxy{
 				}
 			density = offsetArms(density);
 		}
+		
+		//adding background - outlining galaxy
+		temp = new double[maxtheta][maxradius];
+		double tlength = maxtheta / 10 / majorarms, rlength = maxradius / 10 / majorarms;
+		int tempt, tempr;
+		
+		/*for (double t = 0; t < maxtheta; t++)
+			for (double r = 0; r < maxradius; r++){
+				for (double ft = (int) (t - tlength); ft < (int) (t + tlength); ft++){
+					tempt = (int) ft + 1;
+					if (tempt >= maxtheta) tempt -= maxtheta;
+					if (tempt < 0) tempt += maxtheta;
+					if (density[tempt][(int) r] != 0){
+						x = (double) (ft - t - 1) / tlength;
+						predensity = (2 / Math.pow(tlength, 2)) * 
+								Math.pow((x - tlength), 2);
+						if (temp[(int) t][(int) r] > predensity) continue;
+						temp[(int) t][(int) r] = predensity;
+					}
+					tempt = (int) ft - 1;
+					if (tempt >= maxtheta) tempt -= maxtheta;
+					if (tempt < 0) tempt += maxtheta;
+					if (density[tempt][(int) r] != 0){
+						x = (double) (ft - t + 1) / tlength;
+						predensity = (2 / Math.pow(tlength, 2)) 
+								* Math.pow((x - tlength), 2);
+						if (temp[(int) t][(int) r] > predensity) continue;
+						temp[(int) t][(int) r] = predensity;
+					}
+				}
+				for (double fr = (int) (r - rlength); fr < (int) (r + rlength); fr++){
+					tempr = (int) fr + 1;
+					if (tempr >= maxradius) continue;
+					if (tempr < 0) continue;
+					if (density[(int) t][tempr] != 0){
+						x = (double) (fr - r - 1) / rlength;
+						predensity = (2 / Math.pow(rlength, 2)) * 
+								Math.pow((x - rlength), 2);
+						if (temp[(int) t][(int) r] > predensity) continue;
+						temp[(int) t][(int) r] = predensity;
+					}
+					tempr = (int) fr - 1;
+					if (tempr >= maxradius) continue;
+					if (tempr < 0) continue;
+					if (density[(int) t][tempr] != 0){
+						x = (fr - r + 1) / rlength;
+						//System.out.println("(" + fr + " - " + r + " + 1) / " + rlength + " = " + x);
+						predensity = (2 / Math.pow(rlength, 2)) * 
+								Math.pow((x - rlength), 2);
+						//System.out.println(predensity);
+						if (temp[(int) t][(int) r] > predensity) continue;
+						temp[(int) t][(int) r] = predensity;
+					}
+				}
+			}*/
+		
+		//filling background with cutoff based densities
+		for (double r = 0; r < maxradius; r++){
+			cutoff = universal.Function.linearFunction(-0.4, 8, (r / maxradius) * 10) / 2 - 1;
+			for (int t = 0; t < maxtheta; t++)
+				temp[t][(int) r] += cutoff;
+		}
+		
+		//combining background with arms
+		for (int t = 0; t < maxtheta; t++)
+			for (int r = 0; r < maxradius; r++)
+				if (density[t][r] == 0) density[t][r] = temp[t][r]; 
 	
 		sector = new structural.Sector[maxtheta][maxradius];
 		for (int i = 0; i < maxtheta; i++)
@@ -333,10 +404,10 @@ public class Main extends Galaxy{
 		return numsat;
 	}
 	public int calcBarSize(){
-		return 1;//universal.Main.getRandomInt(0, 2);
+		return universal.Main.getRandomInt(0, 2);
 	}
 	public int calcGrade(){
-		return 5;//universal.Main.getRandomInt(0, 5);
+		return universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
 		if (barsize == 0) return universal.Main.getRandomInt(3, 8);
