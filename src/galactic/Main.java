@@ -276,23 +276,33 @@ public class Main extends Galaxy{
 		}
 		
 		else {
-			//adding bulge
-			for (double r = 0; r < centerdefinition; r++)
-				for (int t = 0; t < maxtheta; t++){
-					x = (r / centerdefinition) * 10;
-					predensity = -0.05 * Math.pow(x, 2) + 10;
-					if (density[t][(int) r] > predensity) continue;
-					density[t][(int) r] = predensity;
-				}
 			density = offsetArms(density);
 		}
 		
+		//adding bulge
+		
+		if (barsize == 2) centerdefinition *= 1.1;  
+		if (barsize == 0 && majorarms == 2) centerdefinition *= 2.5;
+		
+		for (double r = 0; r < centerdefinition; r++)
+			for (int t = 0; t < maxtheta; t++){
+				x = (r / centerdefinition) * 10;
+				predensity = -0.05 * Math.pow(x, 2) + 10;
+				if (density[t][(int) r] > predensity) continue;
+				density[t][(int) r] = predensity;
+			}
+		
+		
+		
+		
 		//adding background - outlining galaxy
 		temp = new double[maxtheta][maxradius];
+		
+		/*
 		double tlength = maxtheta / 10 / majorarms, rlength = maxradius / 10 / majorarms;
 		int tempt, tempr;
 		
-		/*for (double t = 0; t < maxtheta; t++)
+		for (double t = 0; t < maxtheta; t++)
 			for (double r = 0; r < maxradius; r++){
 				for (double ft = (int) (t - tlength); ft < (int) (t + tlength); ft++){
 					tempt = (int) ft + 1;
@@ -410,11 +420,16 @@ public class Main extends Galaxy{
 		return universal.Main.getRandomInt(0, 5);
 	}
 	public int calcMajorArms(){
-		if (barsize == 0) return universal.Main.getRandomInt(3, 8);
+		if (barsize == 0){
+			int arms = universal.Main.getRandomInt(0, 1);
+			if (arms == 0) arms = 2;
+			else arms = universal.Main.getRandomInt(4, 6);
+			return arms;
+		}
 		return 2;
 	}
 	public int calcMinorArms(){
-		int numarms =(int) ((2 - barsize) * majorarms * 1.5);
+		int numarms = (int) ((2 - barsize) * majorarms * 1.5);
 		return numarms;
 	}
 	public double calcSOI(){
