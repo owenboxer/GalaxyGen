@@ -10,6 +10,10 @@ public class Main {
 		universe.initiateUniverse(); 
 	}
 
+	public static boolean changeValue(boolean original){
+		if (original) return false;
+		return true;
+	}
 
 	public static int getRandomInt(int low, int high){
 		Random rng = new Random();
