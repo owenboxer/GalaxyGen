@@ -174,7 +174,7 @@ public class Main extends Galaxy{
 				density[t][r] = temp[t][r];
 		maxradius *= 1.25;
 		
-		if (minorarms > 0){
+		/*if (minorarms > 0){
 			temp = density;
 			
 			int mainarm[] = new int[minorarms], startingradius, startingtheta, minorarmlength;
@@ -236,7 +236,7 @@ public class Main extends Galaxy{
 			for (int t = 0; t < maxtheta; t++)
 				for (int r = 0; r < maxradius; r++)
 					for (int i = 0; i < minorarms; i++){
-						System.out.println(arm[i][t][r] + "  " + density[t][r]);
+						System.out.println(arm[i][t][r] + "  " + density[t][r];
 						if (arm[i][t][r] > density[t][r]){
 							System.out.println("hi");
 							density[t][r] = arm[i][t][r];
@@ -245,7 +245,7 @@ public class Main extends Galaxy{
 			
 			if (!density.equals(temp)) System.out.println("Change");
 					
-		}
+		}*/
 		
 		//adding bar
 		if (barsize > 0){
@@ -369,6 +369,32 @@ public class Main extends Galaxy{
 				if (density[t][(int) r] > predensity) continue;
 				density[t][(int) r] = predensity;
 			}
+		
+		//shrinking to minimum
+		temp = density;
+		int edge = 0;
+		
+		boolean check = false;
+		
+		for (int r = maxradius - 1; r >= 0; r--){
+			for (int t = maxtheta - 1; t >= 0; t--)
+				if (temp[t][r] > 0){
+					edge = r + 1;
+					System.out.println(edge);
+					check = true;
+					break;
+				}
+			if (check) break;
+		}
+		
+		
+		
+		maxradius = edge;
+		density = new double[maxtheta][maxradius];
+		
+		for (int t = 0; t < maxtheta; t++)
+			for (int r = 0; r < maxradius; r++)
+				density[t][r] = temp[t][r];
 		
 		//filling background with cutoff based densities
 		temp = new double[maxtheta][maxradius];
