@@ -2,15 +2,6 @@ package galactic;
 
 public class Main extends Galaxy{
 
-	/* Lines 14 - 20: Variables and constructor
-	 * Lines - : Setting and displaying variables
-	 * Lines - : Algorithm for creating arms
-	 * Lines - : Post-generation steps for all galaxy types
-	 * Lines - : Post-generation for barred galaxies
-	 * Lines - : Addition of minor arms
-	 * Lines - : Methods for calculating aspects of galaxy
-	 */
-
 	public int numbersatellites, barsize, majorarms, minorarms;
 	public double soi, grade;
 
@@ -19,9 +10,6 @@ public class Main extends Galaxy{
 		getID(0);
 	}
 
-	public void initiateClone(){
-		
-	}
 	public void initiateGalaxy() {
 		galaxymass = calcMass();
 		numberstars = calcNumberStars();
@@ -84,11 +72,11 @@ public class Main extends Galaxy{
 			artificialnonarm = 3.0 * nonarmwidth;
 			greaterthancutoff = false;
 			pastfirstlower = false;
-			
+
 			//finding starting point so that the peaks of the upper cosine functions line up
 			startingpoint = nonarmwidth - (((Math.PI * radius) / majorarms) - 
 					(0.5 * armwidth));
-			
+
 			//since the the width of the combined arms is greater than the circumferences of circles 
 			//at the galactic center, these values must be set by other means
 			if (armwidth * majorarms > circumference)
@@ -104,7 +92,7 @@ public class Main extends Galaxy{
 				}
 
 				x = (theta / maxtheta) * circumference;
-				
+
 				if (!pastfirstlower) artificialx = startingpoint + x;
 				else artificialx = x - artificialyaxis;
 
@@ -173,7 +161,7 @@ public class Main extends Galaxy{
 			for (int r = 0; r < maxradius; r++)
 				density[t][r] = temp[t][r];
 		maxradius *= 1.25;
-		
+
 		/*if (minorarms > 0){
 			temp = density;
 			
@@ -249,7 +237,7 @@ public class Main extends Galaxy{
 		
 		//adding bar
 		if (barsize > 0){
-			
+	
 			//adding bulge
 			for (double r = 0; r < centerdefinition; r++)
 				for (int t = 0; t < maxtheta; t++){
@@ -258,7 +246,7 @@ public class Main extends Galaxy{
 					if (density[t][(int) r] > predensity) continue;
 					density[t][(int) r] = predensity;
 				}
-			
+	
 			//splitting galaxy in two
 			double arm1[][] = new double[maxtheta][maxradius];
 			for (int r = 0; r < maxradius; r++)
@@ -270,19 +258,19 @@ public class Main extends Galaxy{
 						arm1[t][r] = 0;
 					}
 				}
-			
+	
 			arm1 = offsetArms(arm1);
 			double resolution = (int) (2.75 * maxradius);
 			arm1 = convertToCartesian(arm1, (int) resolution);
-			
+
 			//offsetting arm origin
 			double barlength;
 			if (barsize == 1) barlength = 0.12;
 			else barlength = 0.25;
-			
+
 			temp = arm1;
 			arm1 = new double[(int) (resolution * (barlength + 1))][(int) (resolution * 1.5)];
-			
+
 			for (int xx = 0; xx < (int) resolution; xx++){
 				for (int yy = (int) 0; yy < resolution; yy++){
 					arm1[xx][(int) (yy + (resolution * (barlength * 0.5)))] = temp[xx][yy];	
@@ -290,17 +278,17 @@ public class Main extends Galaxy{
 			}
 			temp = new double[0][0];
 			resolution = (int) (resolution * (barlength + 1));
-			
+
 			//create arm2 as mirror
 			double arm2[][] = new double[(int) resolution][(int) resolution];
-			
+
 			for (int xx = 0; xx < resolution; xx++)
 				for (int yy = 0; yy < resolution; yy++)
 					arm2[xx][yy] = arm1[(int) (resolution - xx - 1)][(int) (resolution - yy - 1)];
-			 
+ 
 			//combines arms to one array
 			density = new double[(int) resolution][(int) resolution];
-			
+
 			for(int xx = 0; xx < resolution; xx++)
 				for (int yy = 0; yy < resolution; yy++){
 					density[xx][yy] = 0;
@@ -311,15 +299,15 @@ public class Main extends Galaxy{
 						density[xx][yy] = arm2[xx][yy];
 					}
 				}
-			
+
 			//finds space for bar
 			int barxlimit = 0, barylimit = 0;
 			double checklimit = 0;
 			boolean broke = false;
-			
+
 			if (barsize == 1) checklimit = 0.55;
 			else checklimit = 0.6;
-			
+
 			for (int xx = (int) (0.5 * resolution); xx < resolution; xx++){
 				for (int yy = (int) (0.5 * resolution); yy < checklimit * resolution; yy++)
 					if (density[xx][yy] > 0){ 
@@ -329,16 +317,16 @@ public class Main extends Galaxy{
 					}
 				if (broke) break;
 			}
-			
+
 			for (int xx = (int) (0.5 * resolution); xx < resolution; xx++)
 				if (density[xx][(int) ((0.5 * resolution) - barylimit + 1)] > 0){
 					barxlimit = xx - (int) (0.5 * resolution);
 					break;
 				}
-			
+
 			//draws bar between nuclei
 			double bardensity;
-			
+
 			for (int xx = (int) (0.5 * resolution) - barxlimit; xx < (0.5 * resolution) + barxlimit; 
 					xx++)
 				for (int yy = (int) ((0.5 * resolution) - barylimit); yy < (0.5 * resolution) 
@@ -353,15 +341,15 @@ public class Main extends Galaxy{
 				}
 			density = convertToPolar(density);
 		}
-		
+
 		else {
 			density = offsetArms(density);
 		}
-		
+
 		//adding bulge
 		if (barsize == 2) centerdefinition *= 1.1;  
 		if (barsize == 0 && majorarms == 2) centerdefinition *= 2.5;
-		
+
 		for (double r = 0; r < centerdefinition; r++)
 			for (int t = 0; t < maxtheta; t++){
 				x = (r / centerdefinition) * 10;
@@ -369,13 +357,13 @@ public class Main extends Galaxy{
 				if (density[t][(int) r] > predensity) continue;
 				density[t][(int) r] = predensity;
 			}
-		
+
 		//shrinking to minimum
 		temp = density;
 		int edge = 0;
-		
+
 		boolean check = false;
-		
+
 		for (int r = maxradius - 1; r >= 0; r--){
 			for (int t = maxtheta - 1; t >= 0; t--)
 				if (temp[t][r] > 0){
@@ -386,49 +374,47 @@ public class Main extends Galaxy{
 				}
 			if (check) break;
 		}
-		
-		
-		
+
 		maxradius = edge;
 		density = new double[maxtheta][maxradius];
-		
+
 		for (int t = 0; t < maxtheta; t++)
 			for (int r = 0; r < maxradius; r++)
 				density[t][r] = temp[t][r];
-		
+
 		//filling background with cutoff based densities
 		temp = new double[maxtheta][maxradius];
-		
+
 		for (double r = 0; r < maxradius; r++){
 			cutoff = universal.Function.linearFunction(-0.4, 8, (r / maxradius) * 10) / 2 - 1;
 			for (int t = 0; t < maxtheta; t++)
 				temp[t][(int) r] += cutoff;
 		}
-		
+
 		//combining background with arms
 		for (int t = 0; t < maxtheta; t++)
 			for (int r = 0; r < maxradius; r++)
 				if (density[t][r] == 0) density[t][r] = temp[t][r]; 
-	
+
 		sector = new structural.Sector[maxtheta][maxradius];
 		for (int i = 0; i < maxtheta; i++)
 			for (int j = 0; j < maxradius; j++){
 				sector[i][j] = new structural.Sector(i, j, density[i][j]);
 			}
 	}
-	
+
 	private double[][] offsetArms(double[][] raw){
 		double unmodified[] = new double[maxtheta], offset, newvalue; 
 
 		for (double i = 0; i < maxradius; i++){
 			for (int j = 0; j < maxtheta; j++)
 				unmodified[j] = raw[j][(int) i];
-			
+	
 			offset = i * ((grade / 6.0) + 1);
 			if (barsize == 2) offset = offset / 2;
 			if (barsize == 1) offset = offset / 1.2;
 			offset = (offset / 100) * 150;
-			
+
 			for (double j = 0; j < maxtheta; j++){
 				newvalue = offset + j;
 				while(newvalue >= maxtheta) {
@@ -441,13 +427,13 @@ public class Main extends Galaxy{
 	}
 	public double[][] unilateralOffset(double[][] raw, double offset){
 		if (offset < 0) offset = maxtheta - offset;
-		
+
 		double unmodified[] = new double[maxtheta], newvalue; 
-		
+
 		for (double i = 0; i < maxradius; i++){
 			for (int j = 0; j < maxtheta; j++)
 				unmodified[j] = raw[j][(int) i];
-			
+	
 			for (double j = 0; j < maxtheta; j++){
 				newvalue = offset + j;
 				while(newvalue >= maxtheta) {
@@ -458,7 +444,7 @@ public class Main extends Galaxy{
 		}
 		return raw;
 	}
-	
+
 	public double calcMass(){
 		double universeage = universal.Main.universe.universeage;
 		return (((universeage-2)/11) * 5) + 8; //scales to 1 - 5, then offsets by 8 
