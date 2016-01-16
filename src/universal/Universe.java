@@ -4,11 +4,17 @@ public class Universe {
 	public double universeage;
 	public galactic.Main maingalaxy;
 	public galactic.Satellite satellitegalaxy[];
+	public String id;
 	
 	public Universe(){
 		universeage = Main.getRandomDouble(1, 10); 
 		universeage = Function.exponentialFunction(0.9, universeage);
 		universeage = (universeage*1.1) + 2;
+		id = "U" + save.Saves.numberofsaves;
+	}
+	public Universe(double age){
+		universeage = age;
+		id = "U" + save.Saves.numberofsaves;
 	}
 	
 	public void initiateUniverse(){

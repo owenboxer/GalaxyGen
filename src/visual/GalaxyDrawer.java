@@ -20,8 +20,8 @@ public class GalaxyDrawer {
 		BufferedImage background = new BufferedImage(image.getWidth(),image.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 		
-		BufferedImage fogImage1 = ImageHandler.loadImage("/Fog1.png");
-		BufferedImage fogImage2 = ImageHandler.loadImage("/GalaxyCluster1.png");
+		BufferedImage fogImage1 = ImageHandler.loadImage("/Images/Fog1.png");
+		BufferedImage fogImage2 = ImageHandler.loadImage("/Images/GalaxyCluster1.png");
 		
 		drawBackground(background, fogImage2);
 		//drawGalaxy(image, density, fogImage1);
