@@ -8,14 +8,24 @@ public class FileIO{
 	public String name;
 	private BufferedReader in = null;
 
-	FileIO(String fileplace, String filename){
-		name = "res/" + fileplace + "/" + filename + ".txt";
+	FileIO(String filename){
+		name = "res/" + filename + ".txt";
 		createFile();
 		initializeBufferedReader();
 	}
 
-	public static void createDirectory(String dirplace, String rawdirname){
-		String dirname = "res/" + dirplace + "/" + rawdirname;
+	public static boolean checkForFile(String filename){
+		String name = "res/" + filename;
+		boolean check = true;
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(name));
+		} catch (IOException e){
+			check = false;
+		}
+		return check;
+	}
+	public static void createDirectory(String rawdirname){
+		String dirname = "res/" + rawdirname;
 		File file = new File(dirname);
 		file.mkdirs();
 	}

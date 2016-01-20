@@ -21,35 +21,16 @@ public class Universe {
 		maingalaxy = new galactic.Main(false);
 		maingalaxy.initiateGalaxy();
 		maingalaxy.display();
-		maingalaxy.createSectors();
-		maingalaxy.displayDensities();
-		/*satellitegalaxy = new galactic.Satellite[maingalaxy.numbersatellites];
-		for (int i = 0; i<satellitegalaxy.length; i++){ 
-			satellitegalaxy[i] = new galactic.Satellite(true, i);
+		satellitegalaxy = new galactic.Satellite[maingalaxy.numbersatellites];
+		for (int i = 0; i < maingalaxy.numbersatellites; i++){
+			satellitegalaxy[i] = new galactic.Satellite(true, i + 1);
 			satellitegalaxy[i].initiateGalaxy();
+			System.out.println();
 			satellitegalaxy[i].display();
-		}*/
-	}
-	
-	public boolean checkSatelliteCoords(double x1, double y1, double r1){
-		boolean check = true;
-		double x2 = 0, y2 = 0, 
-				r2 = maingalaxy.maxradius;
-		double minimum = r1 + r2 + 1;
-		if (Function.radialCheckFunction(x1, y1, x2, y2, minimum)) check = false;
-		
-		else for (int i = 0; i<satellitegalaxy.length; i++){
-			if (!(satellitegalaxy[i] instanceof galactic.Satellite)) break;
-			x2 = satellitegalaxy[i].xsat;
-			y2 = satellitegalaxy[i].ysat; 
-			r2 = satellitegalaxy[i].maxradius;
-			minimum = r1 + r2 + 1;
-			if (Function.radialCheckFunction(x1, y1, x2, y2, minimum)){
-				check = false;
-				break;
-			}
 		}
-		return check;
+		//maingalaxy.createSectors();
+		//maingalaxy.displayDensities();
+		
 	}
 	
 	public static double lyToUniversalUnits(int ly){

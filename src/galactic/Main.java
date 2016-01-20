@@ -11,6 +11,8 @@ public class Main extends Galaxy{
 	}
 
 	public void initiateGalaxy() {
+		rgalaxy = 0;
+		tgalaxy = 0;
 		galaxymass = calcMass();
 		numberstars = calcNumberStars();
 		galaxyage = calcGalaxyAge();
@@ -25,6 +27,7 @@ public class Main extends Galaxy{
 		minorarms = calcMinorArms();
 		meandensity = calcMeanDensity();
 		maxtheta = calcMaxTheta();
+		actualradius = calcActualRadius();
 	}
 	public void display(){
 		universal.Main.log("Mass = " + galaxymass + "\n");

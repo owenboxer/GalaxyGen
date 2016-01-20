@@ -1,7 +1,7 @@
 package galactic;
 
 public class Satellite extends Galaxy{
-	public double radiuserror, xsat, ysat;
+	public double radiuserror;
 	
 	public Satellite(boolean satellite, int id){
 		super(satellite);
@@ -19,6 +19,7 @@ public class Satellite extends Galaxy{
 		radius2 = calcRadius2();
 		maxradius = calcMaxRadius();
 		meandensity = calcMeanDensity();
+		actualradius = calcActualRadius();
 	}
 	public void createSectors() {
 		
@@ -33,8 +34,6 @@ public class Satellite extends Galaxy{
 		universal.Main.log("R1 = " + radius1 + "\n");
 		universal.Main.log("R2 = " + radius2 + "\n");
 		universal.Main.log("Max Radius = " + maxradius + "\n");
-		universal.Main.log("X = " + xsat + "\n");
-		universal.Main.log("Y = " + ysat + "\n");
 		universal.Main.log("Density = " + meandensity + "\n");
 	}
 
@@ -64,16 +63,10 @@ public class Satellite extends Galaxy{
 	}
 	
 	public void getCoords(){
-		boolean check = false;
-		while(!check){
-			xsat = universal.Main.getRandomDouble(universal.Main.universe.maingalaxy.maxradius,
-					universal.Main.universe.maingalaxy.soi);
-			ysat = universal.Main.getRandomDouble(universal.Main.universe.maingalaxy.maxradius,
-					universal.Main.universe.maingalaxy.soi);
-			if (universal.Main.universe.checkSatelliteCoords(xsat, ysat, maxradius)) check = true;
-		}
+		rgalaxy = (int) (galaxymass * universal.Main.universe.maingalaxy.galaxymass);
 	}
-	public String getID(int id){
-		return "S" + id;
+	
+	public String getID(int id) {
+		return "G" + id;
 	}
 }

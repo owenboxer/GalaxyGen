@@ -4,8 +4,9 @@ import visual.GalaxyDrawer;
 
 public abstract class Galaxy{
 	public boolean satellite;
-	public int maxradius, maxtheta;
-	public double galaxymass, numberstars, galaxyage, radius1, radius2, meanradius, meandensity;
+	public int maxradius, maxtheta, tgalaxy, rgalaxy;
+	public double galaxymass, numberstars, galaxyage, radius1, radius2, meanradius, meandensity,
+		actualradius;
 	public String id;
 
 	structural.Sector sector[][] = null;
@@ -101,6 +102,9 @@ public abstract class Galaxy{
 		double density = 10 - universal.Function.exponentialFunction(.9, mass);
 		density = (density / 2) - 4;
 		return density;
+	}
+	public double calcActualRadius(){
+		return galaxymass * 0.5;
 	}
 
 	public abstract String getID(int id);
