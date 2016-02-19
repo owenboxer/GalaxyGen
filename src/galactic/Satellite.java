@@ -2,15 +2,15 @@ package galactic;
 
 public class Satellite extends Galaxy{
 	public double radiuserror;
+	public boolean globularcluster;
 	
-	public Satellite(boolean satellite, int id){
-		super(satellite);
+	public Satellite(int id){
 		getID(id);
-		//getCoords();
 	}
 
 	public void initiateGalaxy(){
 		galaxymass = calcMass();
+		if (galaxymass < 5) globularcluster = true;
 		numberstars = calcNumberStars();
 		galaxyage = calcGalaxyAge();
 		meanradius = calcMeanRadius();
@@ -20,21 +20,17 @@ public class Satellite extends Galaxy{
 		maxradius = calcMaxRadius();
 		meandensity = calcMeanDensity();
 		actualradius = calcActualRadius();
+		//getUniversalRadius();
 	}
 	public void createSectors() {
 		
 	}
 	
 	public void display(){
-		universal.Main.log("Mass = " + galaxymass + "\n");
-		universal.Main.log("#Stars = " + numberstars + "\n");
-		universal.Main.log("Age = " + galaxyage + "\n");
-		universal.Main.log("Mean Radius = " + meanradius + "\n");
-		universal.Main.log("Error = " + radiuserror + "\n");
-		universal.Main.log("R1 = " + radius1 + "\n");
-		universal.Main.log("R2 = " + radius2 + "\n");
-		universal.Main.log("Max Radius = " + maxradius + "\n");
-		universal.Main.log("Density = " + meandensity + "\n");
+		System.out.println(id);
+		System.out.println("Radius = " + actualradius);
+		System.out.println("Theta = " + tgalaxy);
+		System.out.println("Radial = " + rgalaxy);
 	}
 
 	public double calcMass(){
@@ -62,8 +58,11 @@ public class Satellite extends Galaxy{
 		return errorfactor * meanradius;
 	}
 	
-	public void getCoords(){
-		rgalaxy = (int) (galaxymass * universal.Main.universe.maingalaxy.galaxymass);
+	public void getUniversalRadius(){
+		double radius = (galaxymass - 4) / (universal.Main.universe.maingalaxy.galaxymass - 4) * 10;
+		radius = universal.Function.exponentialFunction(0.7, radius);
+		radius += 5;
+		rgalaxy = radius;
 	}
 	
 	public String getID(int id) {

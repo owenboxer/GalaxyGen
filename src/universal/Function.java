@@ -54,4 +54,62 @@ public class Function {
 		x -= zero;
 		return coord;
 	}
+	
+	public static double[][] changeResolutionCartesian(double[][] origin, int resolution){
+		double[][] newresolution = new double[resolution][resolution];
+		double conversionfactor = (double) origin.length / (double) resolution;
+		for (int x = 0; x < resolution; x++)
+			for (int y = 0; y < resolution; y++)
+				newresolution[x][y] = origin[(int) (x * conversionfactor)][(int) (y * conversionfactor)];
+		return newresolution;
+	}
+	public static double[][] changeResolutionPolar(double[][] origin, int maxradius, int maxtheta){
+		double[][] newresolution = new double[maxtheta][maxradius];
+		double thetaconversionfactor = (double) origin.length / (double) maxtheta,
+				radiusconversionfactor = (double) origin[0].length / (double) maxradius;
+		for (int t = 0; t < maxtheta; t++)
+			for (int r = 0; r < maxradius; r++)
+				newresolution[t][r] = origin[(int) (t * thetaconversionfactor)]
+						[(int) (r * radiusconversionfactor)];
+		return newresolution;
+	}
+	public static double[][] arrayToCartesian(double[][] polar, int resolution, int maxtheta, int maxradius){
+		int radius = resolution / 2;
+		double cartesian[][] = new double[resolution][resolution];
+		int x, y;
+		double coord[] = new double[2], theta, radial;
+		for (int i = 0; i < resolution; i++)
+			for (int j = 0; j < resolution; j++){
+				// Moves galaxy to center
+				x = (i - radius);
+				y = (j - radius);
+				coord = cartesianToPolar(x, y);
+				theta = coord[0];
+				radial = coord[1];
+				theta -= theta % (360.0 / (maxtheta - 1));
+				theta = theta / (360.0 / (maxtheta - 1));
+				if (radial >= radius) continue;
+				radial = maxradius * (radial / radius);
+				cartesian[j][i] = polar[(int) theta][(int) radial];
+			}
+		
+		return cartesian;
+	}
+	public static double[][] arrayToPolar(double[][] cartesian, int maxtheta, int maxradius){
+		double polar[][] = new double[maxtheta][maxradius];
+		double coord[] = new double[2], x, y;
+		for (int i = 0; i < maxradius; i++)
+			for (double j = 0; j < maxtheta; j++){
+				x = maxtheta;
+				coord = polarToCartesian(j / (x / 360.0), i);
+				x = coord[0];
+				y = coord[1];
+				x = (0.5 * cartesian.length) * (x / maxradius);
+				y = (0.5 * cartesian.length) * (y / maxradius);
+				x += (0.5 * cartesian.length);
+				y += (0.5 * cartesian.length);
+				polar[(int) j][i] = cartesian[(int) x][(int) y];
+			}
+		return polar;
+	}
 }

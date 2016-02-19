@@ -8,6 +8,7 @@ public class Main {
 	public static void main(String[] args){
 		universe = new Universe();
 		universe.initiateUniverse(); 
+		universe.createGalaxies();
 	}
 
 	public static boolean changeValue(boolean original){
