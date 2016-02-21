@@ -19,9 +19,9 @@ public class GalaxyDrawer {
 				BufferedImage.TYPE_INT_ARGB);
 		BufferedImage background = new BufferedImage(image.getWidth(),image.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
-		
-		BufferedImage fogImage1 = ImageHandler.loadImage("/Images/Fog1.png");
-		BufferedImage fogImage2 = ImageHandler.loadImage("/Images/GalaxyCluster1.png");
+
+		BufferedImage fogImage1 = ImageHandler.loadImage("/images/Fog1.png");
+		BufferedImage fogImage2 = ImageHandler.loadImage("/images/GalaxyCluster1.png");
 		
 		drawBackground(background, fogImage2);
 		//drawGalaxy(image, density, fogImage1);
@@ -44,8 +44,7 @@ public class GalaxyDrawer {
 	private void cutColorGalaxy(BufferedImage image, double[][] density, Graphics2D g) {
 		// Color stuff
 		
-		
-		// These variables exist to prevent sharp edges when going from red to blu
+		// These variables exist to prevent sharp edges when going from red to blue
 		float hue1 = (float)Math.random();
 		float hue2;
 		if (hue1 > 0.5) {

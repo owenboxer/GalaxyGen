@@ -46,7 +46,7 @@ public class Input extends KeyAdapter implements Runnable {
 			System.out.print("");// FOR SOME REASON THIS MAKES IT WORK
 			if (keyP == KeyEvent.VK_R) {
 				//GalaxyDrawer.window.close();
-				Main.universe.initiateUniverse();
+				Main.universe.createGalaxies();
 				keyP = 0;
 			}
 			if (keyP == KeyEvent.VK_S) {
