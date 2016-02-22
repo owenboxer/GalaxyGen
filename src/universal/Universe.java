@@ -11,11 +11,9 @@ public class Universe {
 	public String id;
 	
 	public Universe(){
-		id = "U" + save.Saves.numberofsaves;
 	}
 	public Universe(double age){
 		universeage = age;
-		id = "U" + save.Saves.numberofsaves;
 	}
 	
 	public void initiateUniverse(){

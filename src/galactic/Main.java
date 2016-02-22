@@ -404,7 +404,8 @@ public class Main extends Galaxy{
 		sector = new structural.Sector[180][100];
 		for (int i = 0; i < 180; i++)
 			for (int j = 0; j < 100; j++){
-				sector[i][j] = new structural.Sector(i, j, density[i][j]);
+				sector[i][j] = new structural.Sector(i, j, density[i][j], galaxyage);
+				sector[i][j].initiateSector();
 			}
 	}
 
