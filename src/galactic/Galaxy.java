@@ -3,11 +3,11 @@ package galactic;
 import visual.GalaxyDrawer;
 
 public abstract class Galaxy{
-	public int maxradius, maxtheta;
-	public double galaxymass, numberstars, galaxyage, radius1, radius2, meanradius, meandensity,
-		actualradius, tgalaxy, rgalaxy;
+	public int maxRadius, maxTheta;
+	public double galaxyMass, numberStars, galaxyAge, radius1, radius2, meanRadius, meanDensity,
+		actualRadius, tGalaxy, rGalaxy;
 	public String id;
-	public double hiresdensity[][], density[][] = new double[180][100];
+	public double hiResDensity[][], density[][] = new double[180][100];
 
 	structural.Sector sector[][] = null;
 
@@ -23,14 +23,14 @@ public abstract class Galaxy{
 		//new GalaxyDrawer(universal.Function.arrayToCartesian(hiresdensity, 750, maxtheta, maxradius));
 		new GalaxyDrawer(universal.Function.arrayToCartesian(density, 750, 180, 100));
 	}
-	
+
 	public abstract double calcMass();
 	public double calcNumberStars(){
-		return galaxymass - 1;
+		return galaxyMass - 1;
 	}
 	public abstract double calcGalaxyAge();
 	public double calcMeanRadius(){
-		double volume = Math.pow(10, galaxymass) / Math.pow(10, meandensity);
+		double volume = Math.pow(10, galaxyMass) / Math.pow(10, meanDensity);
 		double radius = Math.sqrt(volume) / Math.PI;
 		radius = Math.log10(radius);
 		return radius;
@@ -44,13 +44,13 @@ public abstract class Galaxy{
 		return 1440;
 	}
 	public double calcMeanDensity(){
-		double mass = (galaxymass - 4) / .8;
+		double mass = (galaxyMass - 4) / .8;
 		double density = 10 - universal.Function.exponentialFunction(.9, mass);
 		density = (density / 2) - 4;
 		return density;
 	}
 	public double calcActualRadius(){
-		return galaxymass * 0.5;
+		return galaxyMass * 0.5;
 	}
 
 	public abstract String getID(int id);

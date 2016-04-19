@@ -3,36 +3,36 @@ package universal;
 import visual.GalaxyDrawer;
 
 public class Universe {
-	public double universeage, unitmeasure;
+	public double universeAge, unitMeasure;
 	private boolean coord[][];
-	public int maxradius = 0;
-	public galactic.Main maingalaxy;
-	public galactic.Satellite satellitegalaxy[];
+	public int maxRadius = 0;
+	public galactic.Main mainGalaxy;
+	public galactic.Satellite satelliteGalaxy[];
 	public String id;
-	
+
 	public Universe(){
+		universeAge = calcUniverseAge();
 	}
 	public Universe(double age){
-		universeage = age;
+		universeAge = age;
 	}
-	
+
 	public void initiateUniverse(){
-		
 	}
 	public void displayUniverse(){
-		double display[][] = new double[360][maxradius];
+		double display[][] = new double[360][maxRadius];
 		for (int t = 0; t < 360; t++)
-			for (int r = 0; r < maxradius; r++)
+			for (int r = 0; r < maxRadius; r++)
 				if (coord[t][r]) display[t][r] = 10;
-		display = Function.arrayToCartesian(display, 750, 360, maxradius);
+		display = Function.arrayToCartesian(display, 750, 360, maxRadius);
 		
 		new GalaxyDrawer(display);
 	}
-	
+
 	public void createGalaxies(){
-		maingalaxy = new galactic.Main();
-		maingalaxy.initiateGalaxy();
-		maingalaxy.createSectors();
+		mainGalaxy = new galactic.Main();
+		mainGalaxy.initiateGalaxy();
+		mainGalaxy.createSectors();
 		/*
 		unitmeasure = calcUnitMeasure();
 		
@@ -61,7 +61,7 @@ public class Universe {
 		*/
 		//maingalaxy.displayDensities();
 	}
-	
+
 	public double calcUniverseAge(){
 		double age = Main.getRandomDouble(1, 10); 
 		age = Function.exponentialFunction(0.9, age);
@@ -69,6 +69,6 @@ public class Universe {
 		return age;
 	}
 	public double calcUnitMeasure(){
-		return Math.pow(maingalaxy.actualradius, 10) * 0.2;
+		return Math.pow(mainGalaxy.actualRadius, 10) * 0.2;
 	}
 }

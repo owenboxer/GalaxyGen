@@ -49,7 +49,7 @@ public class Sector {
 	double ionizedMatter = 0, molecularMatter = 1; //breakdown of ionized hydrogen level
 	double lightMatter[], mediumMatter[], heavyMatter[]; //breakdown of matter composition
 	double spectralDistribution[] = new double[70]; //breakdown of spectral type
-	double birthrate[], deathrate = 0, total = 0;
+	public double birthRate[], deathRate = 0, total = 0;
 	double rotationSpeed, friction;
 	double supernovaPressure = 0;
 
@@ -61,22 +61,29 @@ public class Sector {
 	}
 	
 	public void initiateSector(){
-		size = calcSize();
+
 		if (lifetime == null) setLifetimes();
 		if (luminosity == null) setLuminosities();
 		if (synthesis == null) setSynthesisProbabilities();
 		if (mass == null) setMasses();
+
 		for (double type = 0; type < 70; type++) spectralDistribution[(int) type] = 0; //1 / (70 - type);
-		for (int gen = 0; gen < generations; gen++) birthrate[gen] = 0;
+		for (int gen = 0; gen < generations; gen++) birthRate[gen] = 0;
+
 		this.age -= this.age % interval;
 		generations = (int) (this.age / interval);
+
 		lightMatter = new double[generations];
 		mediumMatter = new double[generations];
 		heavyMatter = new double[generations];
-		birthrate = new double[generations];
+		birthRate = new double[generations];
+
 		if (radial >= 10) rotationSpeed = Math.sqrt(11); //takes into account the effects of dark matter
 		else rotationSpeed = Math.sqrt((double) radial + 1);
+		size = Math.pow(radial + 1, 2) - Math.pow(radial, 2);
+
 		runSimulation();
+		adjustScale();
 	}
 	
 	private void runSimulation(){
@@ -86,21 +93,20 @@ public class Sector {
 			molecularMatter = 1 - ionizedMatter;
 			if (molecularMatter < 0) molecularMatter = 0;
 
-			final double Kbr = 1000; //converts birthrate to a realistic value
-			birthrate[(int) (time / interval)] = Math.pow(8 * gaseousMatter * molecularMatter, density);
+			birthRate[(int) (time / interval)] = Math.pow(8 * gaseousMatter * molecularMatter, density);
 			//birthrate[(int) (time / interval)] += supernovaPressure;
 			
 			getSpectralDistributions(time);
 
 			final double Ksm = 0.00000025;
-			stellarMatter += (birthrate[(int) (time / interval)] - deathrate) * Ksm;
+			stellarMatter += (birthRate[(int) (time / interval)] - deathRate) * Ksm;
 			gaseousMatter = 1 - stellarMatter;
 			//System.out.println(birthrate[(int) (time / interval)]);
 			//System.out.println(deathrate);
 		}
 		double number = 0;
 		for (int i = 60; i < 70; i++) number += spectralDistribution[i];
-		System.out.println(total);
+		//System.out.println(total);
 	}
 	private void getIonizedMatter(){
 		double radiation = 0;
@@ -125,36 +131,32 @@ public class Sector {
 		for(int type = 0; type < 70; type++){
 			for (long time = 0; time < current; time += interval){
 				if (lifetime[type] <= current - time && lifetime[type] > current - interval - time){
-					if (type < 14) supernovaPressure += mass[type] * synthesis[type] * (double) birthrate[(int) (time / interval)];
-					amtDead += synthesis[type] * birthrate[(int) (time / interval)];
-					//System.out.println("HI " + birthrate[(int) (time / interval)]);
-					spectralType[type] -= synthesis[type] * (double) birthrate[(int) (time / interval)];
+					if (type < 14) supernovaPressure += mass[type] * synthesis[type] * (double) birthRate[(int) (time / interval)];
+					amtDead += synthesis[type] * birthRate[(int) (time / interval)];
+					spectralType[type] -= synthesis[type] * (double) birthRate[(int) (time / interval)];
 				}
 			}
 			//ADD COMPOSITION CALCULATIONS HERE
 			
-			spectralType[type] += synthesis[type] * birthrate[(int) (current / interval)];
+			spectralType[type] += synthesis[type] * birthRate[(int) (current / interval)];
 		}
 		
 		supernovaPressure *= 0.01 * (molecularMatter + (0.1 * ionizedMatter));
-		deathrate = amtDead;
+		deathRate = amtDead;
 		
-		total += birthrate[(int) (current / interval)];
-		total -= deathrate;
+		total += birthRate[(int) (current / interval)];
+		total -= deathRate;
 		
 		double total2 = 0;
 		for (int type = 0; type < 70; type++) total2 += spectralType[type];
-		for (int type = 0; type < 70; type++){
+		for (int type = 0; type < 70; type++)
 			spectralDistribution[type] = spectralType[type] / total2;
-			//System.out.println(spectralDistribution[type]);
-		}
 	}
-	
-	private double calcSize(){
-		double area1 = Math.PI * Math.pow((radial + 1), 2) / 180, 
-				area2 = Math.PI * Math.pow(radial, 2) / 180;
-		final double K = 0.017453292519943295; //constant of proportionality;
-		return (area1 - area2) / K; //the innermost sector has an area equal to 1 unit
+
+	private void adjustScale(){
+		total *= size; //keeping density constant, adjusts to fit size to entire galaxy
+		double K = 0.0001; //corrects for amount of stars in the galaxy
+		total *= K * Math.pow(universal.Main.universe.mainGalaxy.galaxyMass - 7, 10); //MUST UPDATE FOR BEFORE IMPLEMENTING SATELLITE GALAXIES
 	}
 	
 }
