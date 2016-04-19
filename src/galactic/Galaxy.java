@@ -20,8 +20,17 @@ public abstract class Galaxy{
 	public abstract void display();
 
 	public void displayDensities(){
-		//new GalaxyDrawer(universal.Function.arrayToCartesian(hiresdensity, 750, maxtheta, maxradius));
-		new GalaxyDrawer(universal.Function.arrayToCartesian(density, 750, 180, 100));
+		double ionizedGas[][] = new double[sector.length][sector[0].length];
+
+		for (int t = 0; t < sector.length; t++)
+			for (int r = 0; r < sector[0].length; r++){
+				ionizedGas[t][r] = sector[t][r].ionizedMatter;
+				if (ionizedGas[t][r] > 1) ionizedGas[t][r] = 1;
+			}
+		//new GalaxyDrawer(universal.Function.arrayToCartesian(hiResDensity, 750, maxTheta, maxRadius),
+				//universal.Function.arrayToCartesian(ionizedGas, 750, 180, 100));
+		new GalaxyDrawer(universal.Function.arrayToCartesian(density, 750, 180, 100),
+				universal.Function.arrayToCartesian(ionizedGas, 750, 180, 100));
 	}
 
 	public abstract double calcMass();

@@ -20,13 +20,15 @@ public class Universe {
 	public void initiateUniverse(){
 	}
 	public void displayUniverse(){
+		//will require UniverseDrawer Class
+
 		double display[][] = new double[360][maxRadius];
 		for (int t = 0; t < 360; t++)
 			for (int r = 0; r < maxRadius; r++)
 				if (coord[t][r]) display[t][r] = 10;
 		display = Function.arrayToCartesian(display, 750, 360, maxRadius);
 		
-		new GalaxyDrawer(display);
+		//new GalaxyDrawer(display);
 	}
 
 	public void createGalaxies(){
@@ -59,7 +61,7 @@ public class Universe {
 		haloboundary = clusters / 50;
 		if (roundup) haloboundary++;
 		*/
-		//maingalaxy.displayDensities();
+		mainGalaxy.displayDensities();
 	}
 
 	public double calcUniverseAge(){

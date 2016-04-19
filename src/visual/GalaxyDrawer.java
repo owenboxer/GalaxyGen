@@ -14,7 +14,7 @@ public class GalaxyDrawer {
 	public static String message = "";// DEBUG/UTILITY ONLY
 
 
-	public GalaxyDrawer(double[][] density) {
+	public GalaxyDrawer(double[][] density, double[][] ionizedGas) {
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_ARGB);
 		BufferedImage background = new BufferedImage(image.getWidth(),image.getHeight(),
@@ -25,7 +25,7 @@ public class GalaxyDrawer {
 		
 		drawBackground(background, fogImage2);
 		//drawGalaxy(image, density, fogImage1);
-		drawGalaxyOLD(image, density);
+		drawGalaxyOLD(image, density, ionizedGas);
 		Graphics2D g = (Graphics2D)background.getGraphics();
 		g.drawImage(image, 0, 0,null);
 		if (window == null) // When restarting, you don't want to make a new window!
@@ -81,14 +81,14 @@ public class GalaxyDrawer {
 			}
 	}
 
-	private void drawGalaxyOLD(BufferedImage image, double[][] density) {
+	private void drawGalaxyOLD(BufferedImage image, double[][] density, double[][] ionizedGas) {
 		/// FOR DEBUGING AND EARLY DEVELOPMENT.
 
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		float hue = (new Random()).nextFloat();// Random hue, just for fun.
 		for(int xx = 0; xx < density.length; xx++) {
 			for(int yy = 0; yy < density[xx].length; yy++) {
-				g.setColor(Color.getHSBColor(hue, 1, (float)density[xx][yy]/10));
+				g.setColor(Color.getHSBColor(hue, (float)ionizedGas[xx][yy], (float)density[xx][yy]/10));
 				g.fillRect(xx * rectWidth, yy * rectHeight, rectWidth, rectHeight);
 				//g.setColor(Color.BLUE);
 				//g.drawString(Integer.toString(density[xx][yy]), xx * rectWidth, (yy + 1) * rectHeight);

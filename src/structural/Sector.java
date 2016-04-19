@@ -46,7 +46,7 @@ public class Sector {
 	
 	//the following variable represent the breakdown of the sectors ISM
 	double stellarMatter = 0, gaseousMatter = 1; //breakdown of stars vs. non-stars
-	double ionizedMatter = 0, molecularMatter = 1; //breakdown of ionized hydrogen level
+	public double ionizedMatter = 0, molecularMatter = 1; //breakdown of ionized hydrogen level
 	double lightMatter[], mediumMatter[], heavyMatter[]; //breakdown of matter composition
 	double spectralDistribution[] = new double[70]; //breakdown of spectral type
 	public double birthRate[], deathRate = 0, total = 0;
@@ -114,7 +114,7 @@ public class Sector {
 			radiation += spectralDistribution[type] * (double) (luminosity[type]);
 		}
 		friction = (Math.pow(density + supernovaPressure, 2)) / rotationSpeed;
-		radiation *= (1.5 * ionizedMatter + 5.5 * stellarMatter + 0.025 * gaseousMatter) * friction;
+		radiation *= (1 * ionizedMatter + 5.5 * stellarMatter + 0.025 * gaseousMatter) * friction;
 		final double K = 1;
 		ionizedMatter = radiation / K;
 		if (ionizedMatter > 1) ionizedMatter = Math.cbrt(ionizedMatter);
