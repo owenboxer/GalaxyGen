@@ -371,7 +371,6 @@ public class Main extends Galaxy{
 			for (int t = maxtheta - 1; t >= 0; t--)
 				if (temp[t][r] > 0){
 					edge = r + 1;
-					System.out.println(edge);
 					check = true;
 					break;
 				}
@@ -402,11 +401,19 @@ public class Main extends Galaxy{
 		density = universal.Function.changeResolutionPolar(hiresdensity, 100, 180);
 		
 		sector = new structural.Sector[180][100];
-		for (int i = 0; i < 180; i++)
-			for (int j = 0; j < 100; j++){
-				sector[i][j] = new structural.Sector(i, j, density[i][j], galaxyage);
-				sector[i][j].initiateSector();
+		for (int t = 0; t < 180; t++)
+			for (int r = 0; r < 100; r++){
+				sector[t][r] = new structural.Sector(t, r, density[t][r], galaxyage);
+				//sector[t][r].initiateSector();
 			}
+		
+		//structural.Sector test = new structural.Sector(0, 20, 5, 13.12);
+		//test.initiateSector();
+		structural.Sector test[] = new structural.Sector[100];
+		for (double i = 0; i < 100; i++){
+			test[(int) i] = new structural.Sector(0, (int) i, (double) (100 - i) / 10, 13.21);
+			test[(int) i].initiateSector();
+		}
 	}
 
 	private double[][] offsetArms(double[][] raw){

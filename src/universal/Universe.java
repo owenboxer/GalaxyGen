@@ -59,7 +59,7 @@ public class Universe {
 		haloboundary = clusters / 50;
 		if (roundup) haloboundary++;
 		*/
-		maingalaxy.displayDensities();
+		//maingalaxy.displayDensities();
 	}
 	
 	public double calcUniverseAge(){
