@@ -2,7 +2,7 @@ package structural;
 
 public class Sector {
 	public int radial, polar;
-	public double size, density, radiation;
+	public double size, density, radiation, trueDensity;
 	
 	private static long lifetime[] = null;
 	private void setLifetimes(){
@@ -60,6 +60,11 @@ public class Sector {
 		this.age = (long) (galaxyAge * 1000000000);
 	}
 	
+	/**
+	 * @author owencarter
+	 * This function initiates a sector, setting its variables and running its simulation.
+	 * It should be run only for sectors that require data related to birthrate.
+	 */
 	public void initiateSector(){
 
 		if (lifetime == null) setLifetimes();
@@ -83,6 +88,9 @@ public class Sector {
 		size = Math.pow(radial + 1, 2) - Math.pow(radial, 2);
 
 		runSimulation();
+
+		trueDensity = total;
+
 		adjustScale();
 	}
 	
@@ -93,19 +101,18 @@ public class Sector {
 			molecularMatter = 1 - ionizedMatter;
 			if (molecularMatter < 0) molecularMatter = 0;
 
-			birthRate[(int) (time / interval)] = Math.pow(8 * gaseousMatter * molecularMatter, density);
-			//birthrate[(int) (time / interval)] += supernovaPressure;
+			birthRate[(int) (time / interval)] = Math.pow(3 * gaseousMatter * molecularMatter, density);
+			birthRate[(int) (time / interval)] += supernovaPressure;
 			
 			getSpectralDistributions(time);
 
-			final double Ksm = 0.00000025;
+			final double Ksm = 0.0000025;
 			stellarMatter += (birthRate[(int) (time / interval)] - deathRate) * Ksm;
 			gaseousMatter = 1 - stellarMatter;
-			//System.out.println(birthrate[(int) (time / interval)]);
-			//System.out.println(deathrate);
+			//System.out.println(supernovaPressure);
 		}
 		double number = 0;
-		for (int i = 60; i < 70; i++) number += spectralDistribution[i];
+		for (int i = 0; i < 10; i++) number += spectralDistribution[i];
 		//System.out.println(total);
 	}
 	private void getIonizedMatter(){
@@ -114,7 +121,7 @@ public class Sector {
 			radiation += spectralDistribution[type] * (double) (luminosity[type]);
 		}
 		friction = (Math.pow(density + supernovaPressure, 2)) / rotationSpeed;
-		radiation *= (1 * ionizedMatter + 5.5 * stellarMatter + 0.025 * gaseousMatter) * friction;
+		radiation *= (1 * ionizedMatter + 3.5 * stellarMatter + 0.025 * gaseousMatter) * friction;
 		final double K = 1;
 		ionizedMatter = radiation / K;
 		if (ionizedMatter > 1) ionizedMatter = Math.cbrt(ionizedMatter);
@@ -136,12 +143,10 @@ public class Sector {
 					spectralType[type] -= synthesis[type] * (double) birthRate[(int) (time / interval)];
 				}
 			}
-			//ADD COMPOSITION CALCULATIONS HERE
-			
 			spectralType[type] += synthesis[type] * birthRate[(int) (current / interval)];
 		}
 		
-		supernovaPressure *= 0.01 * (molecularMatter + (0.1 * ionizedMatter));
+		supernovaPressure *= 100 * (molecularMatter + (0.1 * ionizedMatter));
 		deathRate = amtDead;
 		
 		total += birthRate[(int) (current / interval)];
@@ -153,10 +158,14 @@ public class Sector {
 			spectralDistribution[type] = spectralType[type] / total2;
 	}
 
+	private void calcMatterDistribution(){
+		
+	}
+
 	private void adjustScale(){
 		total *= size; //keeping density constant, adjusts to fit size to entire galaxy
-		double K = 0.0001; //corrects for amount of stars in the galaxy
-		total *= K * Math.pow(universal.Main.universe.mainGalaxy.galaxyMass - 7, 10); //MUST UPDATE FOR BEFORE IMPLEMENTING SATELLITE GALAXIES
+		double K = 0.5; //corrects for amount of stars in the galaxy
+		total *= K * Math.pow(Math.sqrt(universal.Main.universe.mainGalaxy.galaxyMass - 7), 10); //MUST UPDATE FOR BEFORE IMPLEMENTING SATELLITE GALAXIES
 	}
 	
 }

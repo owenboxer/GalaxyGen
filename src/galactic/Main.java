@@ -417,7 +417,7 @@ public class Main extends Galaxy{
 
 		System.out.println(number + " " + galaxyMass);
 
-		//structural.Sector test = new structural.Sector(0, 20, 5, 13.12);
+		//structural.Sector test = new structural.Sector(0, 0, 10, 13.12);
 		//test.initiateSector();
 		/*structural.Sector test[] = new structural.Sector[100];
 		for (double i = 0; i < 100; i++){
