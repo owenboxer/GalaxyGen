@@ -1,8 +1,6 @@
-/.gitignore
+/chemistry/
 /galactic/
 /structural/
 /universal/
-/visual/
-/chemistry/
-/utility/
 /util/
+/visual/

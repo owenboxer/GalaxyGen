@@ -5,21 +5,21 @@ public class Sector {
 	public double size, density, radiation, trueDensity;
 	
 	private static long lifetime[] = null;
-	private void setLifetimes(){
+	private static void setLifetimes(){
 		lifetime = new long[70]; //70 spectral types
 		String[] packedLifetime = util.FileHandler.readFile("res/spectraldata/lifetime.txt");
 		for (int i = 0; i < 70; i++)
 			lifetime[i] = Long.valueOf(packedLifetime[i]).longValue();
 	}
 	private static double luminosity[] = null;
-	private void setLuminosities(){
+	private static void setLuminosities(){
 		luminosity = new double[70];
 		String[] packedLuminosity = util.FileHandler.readFile("res/spectraldata/luminosity.txt");
 		for (int i = 0; i < 70; i++)
 			luminosity[i] = Double.valueOf(packedLuminosity[i]).doubleValue();
 	}
 	private static double synthesis[] = null;
-	private void setSynthesisProbabilities(){
+	private static void setSynthesisProbabilities(){
 		synthesis = new double[70];
 		String[] packedSynthesis = util.FileHandler.readFile("res/spectraldata/synthesis.txt");
 		for (int i = 0; i < 70; i++)

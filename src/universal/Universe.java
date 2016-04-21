@@ -6,8 +6,12 @@ public class Universe {
 	public double universeAge, unitMeasure;
 	private boolean coord[][];
 	public int maxRadius = 0;
+
 	public galactic.Main mainGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
+
+	public static chemistry.Element[] element = new chemistry.Element[94];
+
 	public String id;
 
 	public Universe(){
@@ -61,7 +65,15 @@ public class Universe {
 		haloboundary = clusters / 50;
 		if (roundup) haloboundary++;
 		*/
-		mainGalaxy.displayDensities();
+		//mainGalaxy.displayDensities();
+	}
+
+	public void makeElements(){
+		for (int e = 0; e < 94; e++)
+			element[e] = new chemistry.Element(e + 1);
+
+		for (int e = 0; e < 94; e++)
+			element[e].createIsotopes();
 	}
 
 	public double calcUniverseAge(){
