@@ -1,4 +1,4 @@
-package universal;
+package core;
 
 import java.util.Random;
 
@@ -6,10 +6,11 @@ public class Main {
 	public static Universe universe;
 	
 	public static void main(String[] args){
-		universe = new Universe();
+		universe = new Universe("U0");
 		universe.makeElements();
-		universe.initiateUniverse(); 
 		universe.createGalaxies();
+
+		//universe.saveUniverse();
 	}
 
 	public static boolean changeValue(boolean original){

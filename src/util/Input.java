@@ -4,7 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import universal.Main;
+import core.Main;
 import visual.GalaxyDrawer;
 import visual.ImageHandler;
 

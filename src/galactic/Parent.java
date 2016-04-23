@@ -1,45 +1,94 @@
 package galactic;
 
-public class Main extends Galaxy {
+import util.FileHandler;
+
+public class Parent extends Galaxy {
 
 	public int numberSatellites, barSize, majorArms, minorArms;
 	public double soi, grade;
 
-	public Main() {
-		getID(0);
+	public Parent() {
+		super(0);
+	}
+
+	protected void packData(){
+		packedData = new String[18005];
+		packedData[0] = new StringBuilder().append(galaxyAge).toString();
+		packedData[1] = new StringBuilder().append(barSize).toString();
+		packedData[2] = new StringBuilder().append(grade).toString();
+		packedData[3] = new StringBuilder().append(majorArms).toString();
+		packedData[4] = new StringBuilder().append(minorArms).toString();
+		//densities:
+		for (int t = 0; t < density.length; t++)
+			for (int r = 0; r < density[0].length; r++){
+				packedData[(density.length * r) + t + 5] = new StringBuilder().append(density[t][r]).toString();
+			}
+		
+		//for (int i = 0; i < packedData.length; i++)
+	}
+	protected void unpackData(){
+		galaxyAge = Double.valueOf(packedData[0]).doubleValue();
+		barSize = Integer.valueOf(packedData[1]).intValue();
+		grade = Double.valueOf(packedData[2]).doubleValue();
+		majorArms = Integer.valueOf(packedData[3]).intValue();
+		minorArms = Integer.valueOf(packedData[4]).intValue();
+
+		for (int t = 0; t < 180; t++)
+			for (int r = 0; r < 100; r++){
+				density[t][r] = Double.valueOf(packedData[(density.length * r) + t + 5]).doubleValue();
+			}
 	}
 
 	public void initiateGalaxy() {
 		rGalaxy = 0;
 		tGalaxy = 0;
 		galaxyMass = calcMass();
-		galaxyAge = calcGalaxyAge();
 		maxRadius = calcMaxRadius();
-		numberSatellites = calcNumberSatellites();
-		barSize = calcBarSize();
-		grade = calcGrade();
-		majorArms = calcMajorArms();
-		minorArms = calcMinorArms();
 		maxTheta = calcMaxTheta();
-
 		hiResDensity = new double[maxTheta][maxRadius];
+		
+		if (core.Main.universe.fromSave) {
+			numberSatellites = getNumberSatellites();
+			unpackData();
+		}
+		else {
+			numberSatellites = calcNumberSatellites();
+			galaxyAge = calcGalaxyAge();
+			barSize = calcBarSize();
+			grade = calcGrade();
+			majorArms = calcMajorArms();
+			minorArms = calcMinorArms();
+		}
 	}
 
-	public void display() {
-		universal.Main.log("Mass = " + galaxyMass + "\n");
-		universal.Main.log("Age = " + galaxyAge + "\n");
-		universal.Main.log("Max Radius = " + maxRadius + "\n");
-		universal.Main.log("#Satellites = " + numberSatellites + "\n");
-		universal.Main.log("Bar# = " + barSize + "\n");
-		universal.Main.log("Grade# = " + grade + "\n");
-		universal.Main.log("#Major Arms = " + majorArms + "\n");
-		universal.Main.log("#Minor Arms = " + minorArms + "\n");
+	public void createSectors(){
+		if (!core.Main.universe.fromSave) {
+			setHiResDensities();
+			density = core.Function.changeResolutionPolar(hiResDensity, 100, 180);
+		}
+
+		double number = 0;
+		sector = new structural.Sector[180][100];
+		for (int t = 0; t < 180; t++)
+			for (int r = 0; r < 100; r++) {
+				sector[t][r] = new structural.Sector(t, r, density[t][r], galaxyAge);
+				sector[t][r].initiateSector();
+				number += sector[t][r].total;
+			}
+
+		// System.out.println(number + " " + galaxyMass);
+
+		// structural.Sector test = new structural.Sector(0, 0, 10, 13.12);
+		// test.initiateSector();
+		/*
+		 * structural.Sector test[] = new structural.Sector[100]; for (double i
+		 * = 0; i < 100; i++){ test[(int) i] = new structural.Sector(0, (int) i,
+		 * (double) (100 - i) / 10, 13.21); test[(int) i].initiateSector();
+		 * number += test[(int) i].total; }
+		 */
 	}
 
-	// TODO: Move these functions to a utility function, and probably not main.
-	// 			Suggestion: Move these to a Generator class or as static methods
-	//                      within Galaxy
-	public void createSectors() {
+	public void setHiResDensities() {
 
 		double armWidth = (maxRadius + (grade / 5)) / majorArms; // armwidth
 																	// remains
@@ -68,7 +117,7 @@ public class Main extends Galaxy {
 			radius = r + 1; // since a circle with a radius of 0 has a
 							// circumference of 0, radius must
 							// begin at 1
-			amplitude = universal.Function.linearFunction(-0.4, 8, (r / maxRadius) * 10);
+			amplitude = core.Function.linearFunction(-0.4, 8, (r / maxRadius) * 10);
 			circumference = 2 * Math.PI * radius;
 			nonArmWidth = (circumference - (armWidth * majorArms)) / majorArms;
 			cutoff = amplitude / 2;
@@ -162,7 +211,7 @@ public class Main extends Galaxy {
 		for (int t = 0; t < maxTheta; t++) {
 			slope = -1 * ((10 - hiResDensity[t][(int) centerDefinition]) / 10);
 			for (double r = 0; r < centerDefinition; r++) {
-				preDensity = universal.Function.linearFunction(slope, 10, (r / centerDefinition) * 10);
+				preDensity = core.Function.linearFunction(slope, 10, (r / centerDefinition) * 10);
 				hiResDensity[t][(int) r] = preDensity;
 			}
 		}
@@ -255,7 +304,7 @@ public class Main extends Galaxy {
 
 			arm1 = offsetArms(arm1);
 			double resolution = (int) (2.75 * maxRadius);
-			arm1 = universal.Function.arrayToCartesian(arm1, (int) resolution, maxTheta, maxRadius);
+			arm1 = core.Function.arrayToCartesian(arm1, (int) resolution, maxTheta, maxRadius);
 
 			// offsetting arm origin
 			double barlength;
@@ -337,7 +386,7 @@ public class Main extends Galaxy {
 						}
 					}
 				}
-			hiResDensity = universal.Function.arrayToPolar(hiResDensity, maxTheta, maxRadius);
+			hiResDensity = core.Function.arrayToPolar(hiResDensity, maxTheta, maxRadius);
 		}
 
 		else {
@@ -387,7 +436,7 @@ public class Main extends Galaxy {
 		temp = new double[maxTheta][maxRadius];
 
 		for (double r = 0; r < maxRadius; r++) {
-			cutoff = universal.Function.linearFunction(-0.4, 8, (r / maxRadius) * 10) / 2 - 1;
+			cutoff = core.Function.linearFunction(-0.4, 8, (r / maxRadius) * 10) / 2 - 1;
 			for (int t = 0; t < maxTheta; t++)
 				temp[t][(int) r] += cutoff;
 		}
@@ -397,30 +446,7 @@ public class Main extends Galaxy {
 			for (int r = 0; r < maxRadius; r++)
 				if (hiResDensity[t][r] == 0)
 					hiResDensity[t][r] = temp[t][r];
-
-		density = universal.Function.changeResolutionPolar(hiResDensity, 100, 180);
-
-		double number = 0;
-		sector = new structural.Sector[180][100];
-		for (int t = 0; t < 180; t++)
-			for (int r = 0; r < 100; r++) {
-				sector[t][r] = new structural.Sector(t, r, density[t][r], galaxyAge);
-				sector[t][r].initiateSector();
-				number += sector[t][r].total;
-			}
-
-		// System.out.println(number + " " + galaxyMass);
-
-		// structural.Sector test = new structural.Sector(0, 0, 10, 13.12);
-		// test.initiateSector();
-		/*
-		 * structural.Sector test[] = new structural.Sector[100]; for (double i
-		 * = 0; i < 100; i++){ test[(int) i] = new structural.Sector(0, (int) i,
-		 * (double) (100 - i) / 10, 13.21); test[(int) i].initiateSector();
-		 * number += test[(int) i].total; }
-		 */
 	}
-
 	private double[][] offsetArms(double[][] raw) {
 		double unmodified[] = new double[maxTheta], offset, newValue;
 
@@ -445,7 +471,6 @@ public class Main extends Galaxy {
 		}
 		return raw;
 	}
-
 	public double[][] unilateralOffset(double[][] raw, double offset) {
 		if (offset < 0)
 			offset = maxTheta - offset;
@@ -467,52 +492,60 @@ public class Main extends Galaxy {
 		return raw;
 	}
 
+
+	public void display() {
+	}
+
+
 	public double calcMass() {
-		double universeAge = universal.Main.universe.universeAge;
+		double universeAge = core.Main.universe.universeAge;
 		return (((universeAge - 2) / 11) * 5) + 8; // scales to 1 - 5, then
 													// offsets by 8
 	}
-
 	public double calcGalaxyAge() {
-		double rNum = universal.Main.getRandomDouble(4, 8);
+		double rNum = core.Main.getRandomDouble(4, 8);
 		return rNum;
 	}
-
 	public int calcNumberSatellites() {
 		double degree = (galaxyMass - 6) / 2;
 		int numSat = (int) Math.pow(10, degree);
 		return numSat;
 	}
-
 	public int calcBarSize() {
-		return universal.Main.getRandomInt(0, 2);
+		return core.Main.getRandomInt(0, 2);
 	}
-
 	public int calcGrade() {
-		return universal.Main.getRandomInt(0, 5);
+		return core.Main.getRandomInt(0, 5);
 	}
-
 	public int calcMajorArms() {
 		if (barSize == 0) {
-			int arms = universal.Main.getRandomInt(0, 1);
+			int arms = core.Main.getRandomInt(0, 1);
 			if (arms == 0)
 				arms = 2;
 			else
-				arms = universal.Main.getRandomInt(4, 6);
+				arms = core.Main.getRandomInt(4, 6);
 			return arms;
 		}
 		return 2;
 	}
-
 	public int calcMinorArms() {
 		if (barSize == 2)
 			return 0;
 		if (majorArms > 2)
 			return 6 - majorArms;
-		return universal.Main.getRandomInt(2, 4);
+		return core.Main.getRandomInt(2, 4);
 	}
 
-	public String getID(int id) {
-		return "G0";
+	public int getNumberSatellites() {
+		int numberSatellites = 0;
+		String test;
+
+		do {
+			numberSatellites++;
+			test = "G" + numberSatellites;
+		} while (FileHandler.checkExists(core.Main.universe.dirPath + test));
+		numberSatellites -= 1;
+
+		return numberSatellites;
 	}
 }

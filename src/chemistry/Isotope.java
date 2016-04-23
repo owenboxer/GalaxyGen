@@ -79,8 +79,8 @@ public class Isotope {
 	private int getDaughterAtomic(String symbol){
 		int atomicNumber = 0;
 		for (int e = 0; e < 94; e++)
-			if (universal.Universe.element[e].symbol.equals(symbol)){
-				atomicNumber = universal.Universe.element[e].atomicNumber;
+			if (core.Universe.element[e].symbol.equals(symbol)){
+				atomicNumber = core.Universe.element[e].atomicNumber;
 				break;
 			}
 

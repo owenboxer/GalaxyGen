@@ -242,7 +242,7 @@ public class Sector {
 		total *= size; // keeping density constant, adjusts to fit size to
 						// entire galaxy
 		double K = 0.5; // corrects for amount of stars in the galaxy
-		total *= K * Math.pow(Math.sqrt(universal.Main.universe.mainGalaxy.galaxyMass - 7), 10); // MUST
+		total *= K * Math.pow(Math.sqrt(core.Main.universe.parentGalaxy.galaxyMass - 7), 10); // MUST
 																								// UPDATE
 																								// FOR
 																								// BEFORE

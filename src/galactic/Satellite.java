@@ -5,7 +5,12 @@ public class Satellite extends Galaxy{
 	public boolean globularCluster;
 
 	public Satellite(int id){
-		getID(id);
+		super(id);
+	}
+
+	protected void packData(){
+	}
+	protected void unpackData(){
 	}
 
 	public void initiateGalaxy(){
@@ -15,7 +20,11 @@ public class Satellite extends Galaxy{
 		radiusError = calcRadiusError();
 		maxRadius = calcMaxRadius();
 	}
+
 	public void createSectors() {
+	}
+
+	public void setHiResDensities(){
 	}
 
 	public void display(){
@@ -25,15 +34,15 @@ public class Satellite extends Galaxy{
 	}
 
 	public double calcMass(){
-		double mainmass = universal.Main.universe.mainGalaxy.galaxyMass; // uses main galaxy mass
-		double mass  = universal.Main.getRandomDouble(4, mainmass-1);
+		double mainmass = core.Main.universe.parentGalaxy.galaxyMass; // uses main galaxy mass
+		double mass  = core.Main.getRandomDouble(4, mainmass-1);
 		mass = ((mass - 4) / (mainmass - 5)) * 10;
-		mass = universal.Function.exponentialFunction(0.95, mass);
+		mass = core.Function.exponentialFunction(0.95, mass);
 		mass = ((mass / 10) * (mainmass - 5)) + 4;
 		return mass;
 	}
 	public double calcGalaxyAge(){
-		return universal.Main.getRandomDouble(0, 4);
+		return core.Main.getRandomDouble(0, 4);
 	}
 	public double calcRadiusError(){
 		double radiuserror = 4 - galaxyAge;
@@ -42,13 +51,9 @@ public class Satellite extends Galaxy{
 	}
 
 	public void getUniversalRadius(){
-		double radius = (galaxyMass - 4) / (universal.Main.universe.mainGalaxy.galaxyMass - 4) * 10;
-		radius = universal.Function.exponentialFunction(0.7, radius);
+		double radius = (galaxyMass - 4) / (core.Main.universe.parentGalaxy.galaxyMass - 4) * 10;
+		radius = core.Function.exponentialFunction(0.7, radius);
 		radius += 5;
 		rGalaxy = radius;
-	}
-
-	public String getID(int id) {
-		return "G" + id;
 	}
 }

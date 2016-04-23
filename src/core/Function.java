@@ -1,4 +1,4 @@
-package universal;
+package core;
 
 public class Function {
 	

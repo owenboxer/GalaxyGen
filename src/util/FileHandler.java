@@ -54,28 +54,12 @@ public class FileHandler {
 
 		return dataPoint;
 	}
-	public static void writeToFile(String[] newDataPoint, String path, int start){
-		ArrayList<String> dataPoint = new ArrayList<String>(0);
-
-		try{
-			BufferedReader in = new BufferedReader(new FileReader(path));
-
-			String line = null;
-			while ((line = in.readLine()) != null)
-				dataPoint.add(line);
-
-			in.close();
-		} catch (IOException ex){
-			//If file does not exist, then it will be created by PrintWriter
-		}
-
-		for (int i = 0; i < newDataPoint.length; i++)
-			dataPoint.add(i + start, newDataPoint[i]);
-
+	public static void writeToFile(String[] newDataPoint, String path){
 		try{
 			PrintWriter out = new PrintWriter(path);
-			for (int i = 0; i < dataPoint.size(); i++)
-				out.println(dataPoint.get(i));
+			for (int i = 0; i < newDataPoint.length; i++){
+				out.println(newDataPoint[i]);
+			}
 			out.close();
 		} catch (IOException ex){
 			System.err.println(ex);
@@ -84,5 +68,14 @@ public class FileHandler {
 	public static void deleteFile(String path){
 		File file = new File(path);
 		file.delete();
+	}
+
+	public static void makeDirectory(String path){
+		File file = new File(path);
+		if (!file.exists())
+			file.mkdirs();
+	}
+	public static boolean checkExists(String path){
+		return new File(path).exists();
 	}
 }
