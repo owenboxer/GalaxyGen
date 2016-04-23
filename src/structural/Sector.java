@@ -32,6 +32,13 @@ public class Sector {
 		for (int i = 0; i < 70; i++)
 			mass[i] = Double.valueOf(packedMass[i]).doubleValue();
 	}
+	private static double coreTemp[] = null;
+	private void setCoreTemps() {
+		coreTemp = new double[70];
+		String[] packedCoreTemp = util.FileHandler.readFile("res/spectraldata/coretemp.txt");
+		for (int i = 0; i < 70; i++)
+			coreTemp[i] = Double.valueOf(packedCoreTemp[i]).doubleValue();
+	
 
 	// the following variable determine how many generations there are in the
 	// simulation
@@ -170,7 +177,7 @@ public class Sector {
 		double number = 0;
 		for (int i = 0; i < 10; i++)
 			number += spectralDistribution[i];
-		// System.out.println(total);
+		//System.out.println(total + " " + number);
 	}
 
 	private void getIonizedMatter() {

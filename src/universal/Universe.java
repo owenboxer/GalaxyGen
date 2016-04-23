@@ -65,7 +65,7 @@ public class Universe {
 		haloboundary = clusters / 50;
 		if (roundup) haloboundary++;
 		*/
-		//mainGalaxy.displayDensities();
+		mainGalaxy.displayDensities();
 	}
 
 	public void makeElements(){

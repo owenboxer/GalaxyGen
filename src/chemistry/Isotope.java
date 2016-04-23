@@ -71,9 +71,10 @@ public class Isotope {
 			}
 		}
 
-		for (int daughter = 0; daughter < daughterCounter; daughter++)
-			System.out.println(daughterAtomicNumber[daughter] + " " +
-					daughterMassNumber[daughter] + " " + probability[daughter]);
+		/*for (int daughter = 0; daughter < daughterCounter; daughter++)
+		 *	System.out.println(daughterAtomicNumber[daughter] + " " +
+		 *			daughterMassNumber[daughter] + " " + probability[daughter]);
+		 */
 	}
 	private int getDaughterAtomic(String symbol){
 		int atomicNumber = 0;

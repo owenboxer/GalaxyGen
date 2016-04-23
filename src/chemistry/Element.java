@@ -52,7 +52,7 @@ public class Element {
 			if (c == '\t') word++;
 		}
 
-		System.out.println(atomicNumber + " " + name + " " + symbol);
+		//System.out.println(atomicNumber + " " + name + " " + symbol);
 	}
 
 	public void createIsotopes(){
