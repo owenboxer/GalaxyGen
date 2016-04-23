@@ -82,7 +82,4 @@ public class Universe {
 		age = (age*1.1) + 2;
 		return age;
 	}
-	public double calcUnitMeasure(){
-		return Math.pow(mainGalaxy.actualRadius, 10) * 0.2;
-	}
 }

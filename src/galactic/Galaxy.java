@@ -6,12 +6,22 @@ import visual.GalaxyDrawer;
 public abstract class Galaxy {
 	public int maxRadius, maxTheta;
 	public double // TODO: Document the variables that don't make sense
-	galaxyMass, numberStars, galaxyAge, radius1, radius2, meanRadius, meanDensity, actualRadius, tGalaxy, rGalaxy;
-	public String id;
-	public double // TODO: Also document these. Also magic numbers?
-	hiResDensity[][], density[][] = new double[180][100];
+	galaxyMass, galaxyAge;
+
+	double tGalaxy, rGalaxy;
+	
+	/*hiResDensity stores more data in order to display a higher quality data that is
+	 *geometrically identical. density stores data with a relative (logorithmic) value
+	 *representative of the number of stars in a giving region. This value contains
+	 *18,000 values no matter the galaxy, which is representative of the number of sectors
+	 *in the galaxy.
+	 */
+	public double hiResDensity[][], density[][] = new double[180][100];
 
 	Sector sector[][] = null;
+
+	public String id;
+	String[] packedDensities = new String[18000], packedData;
 
 	public Galaxy() {
 	}
@@ -47,17 +57,6 @@ public abstract class Galaxy {
 
 	public abstract double calcGalaxyAge();
 
-	public double calcMeanRadius() {
-		double volume = Math.pow(10, galaxyMass) / Math.pow(10, meanDensity);
-		double radius = Math.sqrt(volume) / Math.PI;
-		radius = Math.log10(radius);
-		return radius;
-	}
-
-	public abstract double calcRadius1();
-
-	public abstract double calcRadius2();
-
 	// TODO: Remove Magic numbers
 	public int calcMaxRadius() {
 		return 500;
@@ -67,17 +66,20 @@ public abstract class Galaxy {
 		return 1440;
 	}
 
-	// TODO: Explain why these numbers are here, even if they're tweaked.
-	public double calcMeanDensity() {
-		double mass = (galaxyMass - 4) / .8;
-		double density = 10 - universal.Function.exponentialFunction(.9, mass);
-		density = (density / 2) - 4;
-		return density;
-	}
-
 	public double calcActualRadius() {
 		return galaxyMass * 0.5;
 	}
 
 	public abstract String getID(int id);
+	
+
+	public void packData(){
+		//densities:
+		for (int t = 0; t < 180; t++)
+			for (int r = 0; r < 100; r++){
+				packedDensities[t * r + r] = density[t][r] + "";
+				if (sector[t][r].loadedMass) 
+					packedDensities[t * r + r] = new StringBuilder().append(packedDensities[t * r + r]).append("L").toString();
+			}
+	}
 }

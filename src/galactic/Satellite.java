@@ -11,23 +11,15 @@ public class Satellite extends Galaxy{
 	public void initiateGalaxy(){
 		galaxyMass = calcMass();
 		if (galaxyMass < 5) globularCluster = true;
-		numberStars = calcNumberStars();
 		galaxyAge = calcGalaxyAge();
-		meanRadius = calcMeanRadius();
 		radiusError = calcRadiusError();
-		radius1 = calcRadius1();
-		radius2 = calcRadius2();
 		maxRadius = calcMaxRadius();
-		meanDensity = calcMeanDensity();
-		actualRadius = calcActualRadius();
-		//getUniversalRadius();
 	}
 	public void createSectors() {
 	}
 
 	public void display(){
 		System.out.println(id);
-		System.out.println("Radius = " + actualRadius);
 		System.out.println("Theta = " + tGalaxy);
 		System.out.println("Radial = " + rGalaxy);
 	}
@@ -47,14 +39,6 @@ public class Satellite extends Galaxy{
 		double radiuserror = 4 - galaxyAge;
 		radiuserror = radiuserror / 8;
 		return radiuserror;
-	}
-	public double calcRadius1(){
-		double errorfactor = 1 + radiusError;
-		return errorfactor * meanRadius;
-	}
-	public double calcRadius2(){
-		double errorfactor = 1 - radiusError;
-		return errorfactor * meanRadius;
 	}
 
 	public void getUniversalRadius(){

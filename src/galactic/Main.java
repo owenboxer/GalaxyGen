@@ -13,38 +13,27 @@ public class Main extends Galaxy {
 		rGalaxy = 0;
 		tGalaxy = 0;
 		galaxyMass = calcMass();
-		numberStars = calcNumberStars();
 		galaxyAge = calcGalaxyAge();
-		meanRadius = calcMeanRadius();
-		radius1 = calcRadius1();
-		radius2 = calcRadius2();
 		maxRadius = calcMaxRadius();
 		numberSatellites = calcNumberSatellites();
 		barSize = calcBarSize();
 		grade = calcGrade();
 		majorArms = calcMajorArms();
 		minorArms = calcMinorArms();
-		meanDensity = calcMeanDensity();
 		maxTheta = calcMaxTheta();
-		actualRadius = calcActualRadius();
 
 		hiResDensity = new double[maxTheta][maxRadius];
 	}
 
 	public void display() {
 		universal.Main.log("Mass = " + galaxyMass + "\n");
-		universal.Main.log("#Stars = " + numberStars + "\n");
 		universal.Main.log("Age = " + galaxyAge + "\n");
-		universal.Main.log("Mean Radius = " + meanRadius + "\n");
-		universal.Main.log("R1 = " + radius1 + "\n");
-		universal.Main.log("R2 = " + radius2 + "\n");
 		universal.Main.log("Max Radius = " + maxRadius + "\n");
 		universal.Main.log("#Satellites = " + numberSatellites + "\n");
 		universal.Main.log("Bar# = " + barSize + "\n");
 		universal.Main.log("Grade# = " + grade + "\n");
 		universal.Main.log("#Major Arms = " + majorArms + "\n");
 		universal.Main.log("#Minor Arms = " + minorArms + "\n");
-		universal.Main.log("Density = " + meanDensity + "\n");
 	}
 
 	// TODO: Move these functions to a utility function, and probably not main.
@@ -489,14 +478,6 @@ public class Main extends Galaxy {
 		return rNum;
 	}
 
-	public double calcRadius1() {
-		return meanRadius + 1; // increasing radius by one with small error
-	}
-
-	public double calcRadius2() {
-		return meanRadius - 1; // decreasing radius by one with small error
-	}
-
 	public int calcNumberSatellites() {
 		double degree = (galaxyMass - 6) / 2;
 		int numSat = (int) Math.pow(10, degree);
@@ -529,10 +510,6 @@ public class Main extends Galaxy {
 		if (majorArms > 2)
 			return 6 - majorArms;
 		return universal.Main.getRandomInt(2, 4);
-	}
-
-	public double calcSOI() {
-		return radius1 + 1;
 	}
 
 	public String getID(int id) {

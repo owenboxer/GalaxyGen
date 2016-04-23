@@ -1,6 +1,8 @@
 package structural;
 
 public class Sector {
+	public boolean loadedMass = false;
+
 	public int radial, polar;
 	public double size, density, radiation, trueDensity;
 
@@ -35,10 +37,10 @@ public class Sector {
 	private static double coreTemp[] = null;
 	private void setCoreTemps() {
 		coreTemp = new double[70];
-		String[] packedCoreTemp = util.FileHandler.readFile("res/spectraldata/coretemp.txt");
+		String[] packedCoreTemp = util.FileHandler.readFile("res/spectraldata/coreTemp.txt");
 		for (int i = 0; i < 70; i++)
 			coreTemp[i] = Double.valueOf(packedCoreTemp[i]).doubleValue();
-	
+	}
 
 	// the following variable determine how many generations there are in the
 	// simulation
@@ -82,6 +84,8 @@ public class Sector {
 			setSynthesisProbabilities();
 		if (mass == null)
 			setMasses();
+		if (coreTemp == null)
+			setCoreTemps();
 
 		for (double type = 0; type < 70; type++)
 			spectralDistribution[(int) type] = 0; // 1 / (70 - type);
@@ -239,12 +243,12 @@ public class Sector {
 						// entire galaxy
 		double K = 0.5; // corrects for amount of stars in the galaxy
 		total *= K * Math.pow(Math.sqrt(universal.Main.universe.mainGalaxy.galaxyMass - 7), 10); // MUST
-																									// UPDATE
-																									// FOR
-																									// BEFORE
-																									// IMPLEMENTING
-																									// SATELLITE
-																									// GALAXIES
+																								// UPDATE
+																								// FOR
+																								// BEFORE
+																								// IMPLEMENTING
+																								// SATELLITE
+																								// GALAXIES
 	}
 
 }
