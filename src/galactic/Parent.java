@@ -12,19 +12,24 @@ public class Parent extends Galaxy {
 	}
 
 	protected void packData(){
-		packedData = new String[18005];
+		packedData = new String[5];
 		packedData[0] = new StringBuilder().append(galaxyAge).toString();
 		packedData[1] = new StringBuilder().append(barSize).toString();
 		packedData[2] = new StringBuilder().append(grade).toString();
 		packedData[3] = new StringBuilder().append(majorArms).toString();
 		packedData[4] = new StringBuilder().append(minorArms).toString();
+
 		//densities:
-		for (int t = 0; t < density.length; t++)
-			for (int r = 0; r < density[0].length; r++){
-				packedData[(density.length * r) + t + 5] = new StringBuilder().append(density[t][r]).toString();
+		packedDensities = new String[18000];
+		packedIonized = new String[18000];
+		for (int t = 0; t < 180; t++)
+			for (int r = 0; r < 100; r++){
+				packedDensities[(180 * r) + t] = new StringBuilder().append(density[t][r]).toString();
+				packedIonized[(180 * r) + t] = new StringBuilder().append(ionizedMatter[t][r]).toString();
 			}
 		
 		//for (int i = 0; i < packedData.length; i++)
+		
 	}
 	protected void unpackData(){
 		galaxyAge = Double.valueOf(packedData[0]).doubleValue();
@@ -32,11 +37,15 @@ public class Parent extends Galaxy {
 		grade = Double.valueOf(packedData[2]).doubleValue();
 		majorArms = Integer.valueOf(packedData[3]).intValue();
 		minorArms = Integer.valueOf(packedData[4]).intValue();
+		packedData = null;
 
 		for (int t = 0; t < 180; t++)
-			for (int r = 0; r < 100; r++){
-				density[t][r] = Double.valueOf(packedData[(density.length * r) + t + 5]).doubleValue();
-			}
+			for (int r = 0; r < 100; r++) {
+				density[t][r] = Double.valueOf(packedDensities[(180 * r) + t]).doubleValue();
+				ionizedMatter[t][r] = Double.valueOf(packedIonized[(180 * r) + t]).doubleValue();
+		}
+		packedDensities = null;
+		packedIonized = null;
 	}
 
 	public void initiateGalaxy() {
@@ -62,10 +71,8 @@ public class Parent extends Galaxy {
 	}
 
 	public void createSectors(){
-		if (!core.Main.universe.fromSave) {
-			setHiResDensities();
-			density = core.Function.changeResolutionPolar(hiResDensity, 100, 180);
-		}
+		setHiResDensities();
+		density = core.Function.changeResolutionPolar(hiResDensity, 100, 180);
 
 		double number = 0;
 		sector = new structural.Sector[180][100];
@@ -86,6 +93,10 @@ public class Parent extends Galaxy {
 		 * (double) (100 - i) / 10, 13.21); test[(int) i].initiateSector();
 		 * number += test[(int) i].total; }
 		 */
+
+		for (int t = 0; t < 180; t++)
+			for (int r = 0; r < 100; r++)
+				ionizedMatter[t][r] = sector[t][r].ionizedMatter;
 	}
 
 	public void setHiResDensities() {
@@ -512,7 +523,7 @@ public class Parent extends Galaxy {
 		return numSat;
 	}
 	public int calcBarSize() {
-		return core.Main.getRandomInt(0, 2);
+		return 0;//core.Main.getRandomInt(0, 2);
 	}
 	public int calcGrade() {
 		return core.Main.getRandomInt(0, 5);
@@ -526,7 +537,7 @@ public class Parent extends Galaxy {
 				arms = core.Main.getRandomInt(4, 6);
 			return arms;
 		}
-		return 2;
+		return 3;
 	}
 	public int calcMinorArms() {
 		if (barSize == 2)

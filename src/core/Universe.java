@@ -65,7 +65,10 @@ public class Universe {
 	public void createGalaxies(){
 		parentGalaxy = new galactic.Parent();
 		parentGalaxy.initiateGalaxy();
-		parentGalaxy.createSectors();
+
+		if (!fromSave)
+			parentGalaxy.createSectors();
+
 		parentGalaxy.displayDensities();
 	}
 

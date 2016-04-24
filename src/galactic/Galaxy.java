@@ -18,19 +18,23 @@ public abstract class Galaxy {
 	 * in the galaxy.
 	 */
 	public double hiResDensity[][], density[][] = new double[180][100];
+	public double ionizedMatter[][] = new double[180][100];
 
 	Sector sector[][] = null;
 
 	//the following variables are used for saving and loading saves
 	public String id;
-	String packedData[], dirPath;
+	String packedData[], packedDensities[], packedIonized[], dirPath;
 
 	public Galaxy(int id) {
 		this.id = getID(id);
-		dirPath = "res/saves/" + core.Main.universe.id + "/" + this.id;
+		dirPath = "res/saves/" + core.Main.universe.id + "/" + this.id + "/";
 
-		if (core.Main.universe.fromSave)
-			packedData = FileHandler.readFile(dirPath + "/galaxy.txt");
+		if (core.Main.universe.fromSave){
+			packedData = FileHandler.readFile(dirPath + "galaxy.txt");
+			packedDensities = FileHandler.readFile(dirPath + "density.txt");
+			packedIonized = FileHandler.readFile(dirPath + "ionized.txt");
+		}
 	}
 
 	protected String getID(int id) {
@@ -39,7 +43,9 @@ public abstract class Galaxy {
 	public void saveGalaxy(){
 		packData();
 		FileHandler.makeDirectory(dirPath);
-		FileHandler.writeToFile(packedData, dirPath + "/galaxy.txt");
+		FileHandler.writeToFile(packedData, dirPath + "galaxy.txt");
+		FileHandler.writeToFile(packedDensities, dirPath + "density.txt");
+		FileHandler.writeToFile(packedIonized, dirPath + "ionized.txt");
 	}
 	protected abstract void packData();
 	protected abstract void unpackData();
@@ -52,20 +58,12 @@ public abstract class Galaxy {
 
 	public abstract void display();
 	public void displayDensities() {
-		double ionizedGas[][] = new double[sector.length][sector[0].length];
-
-		for (int t = 0; t < sector.length; t++)
-			for (int r = 0; r < sector[0].length; r++) {
-				ionizedGas[t][r] = sector[t][r].ionizedMatter;
-				if (ionizedGas[t][r] > 1)
-					ionizedGas[t][r] = 1;
-			}
 		// new GalaxyDrawer(universal.Function.arrayToCartesian(hiResDensity,
 		// 750, maxTheta, maxRadius),
 		// universal.Function.arrayToCartesian(ionizedGas, 750, 180, 100));
 		// TODO: 750 is the size of the display
 		new GalaxyDrawer(core.Function.arrayToCartesian(density, 750, 180, 100),
-				core.Function.arrayToCartesian(ionizedGas, 750, 180, 100));
+				core.Function.arrayToCartesian(ionizedMatter, 750, 180, 100));
 	}
 
 	public abstract double calcMass();

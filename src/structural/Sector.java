@@ -4,7 +4,7 @@ public class Sector {
 	public boolean loadedMass = false;
 
 	public int radial, polar;
-	public double size, density, radiation, trueDensity;
+	public double size, density, radiation;
 
 	private static long lifetime[] = null;
 	private void setLifetimes() {
@@ -106,7 +106,8 @@ public class Sector {
 
 		runSimulation();
 
-		trueDensity = total;
+		if (ionizedMatter > 1)
+			ionizedMatter = 1;
 
 		adjustScale();
 	}
@@ -235,20 +236,15 @@ public class Sector {
 	}
 
 	private void calcMatterDistribution() {
-
+		
 	}
 
 	private void adjustScale() {
+		double galaxyMass = (((core.Main.universe.universeAge - 2) / 11) * 5) + 8;
 		total *= size; // keeping density constant, adjusts to fit size to
 						// entire galaxy
 		double K = 0.5; // corrects for amount of stars in the galaxy
-		total *= K * Math.pow(Math.sqrt(core.Main.universe.parentGalaxy.galaxyMass - 7), 10); // MUST
-																								// UPDATE
-																								// FOR
-																								// BEFORE
-																								// IMPLEMENTING
-																								// SATELLITE
-																								// GALAXIES
+		total *= K * Math.pow(Math.sqrt(galaxyMass - 7), 10);
 	}
 
 }
