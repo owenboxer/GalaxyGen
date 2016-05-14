@@ -5,7 +5,7 @@ public class SuperParticle {
 	public double direction, magnitude;
 	public double mass = 1;
 
-	public final static double GRAVITATIONAL_CONSTANT = 0.2, FRICTION_CONSTANT = 1,
+	public final static double GRAVITATIONAL_CONSTANT = 0.1, FRICTION_CONSTANT = 1,
 			EXPANSION_CONSTANT = 10;
 
 	public SuperParticle(int xx, int yy){
@@ -60,9 +60,9 @@ public class SuperParticle {
 	public boolean checkForScope(){
 		boolean check = true;
 
-		if (xx < 0 - (1.25 * Math.pow(core.Main.universe.resolution, 2)) || yy < 0 - (1.24 * Math.pow(core.Main.universe.resolution, 2)))
+		if (xx < 0 - (1.25 * core.Main.universe.resolution) || yy < 0 - (1.25 * core.Main.universe.resolution))
 			check = false;
-		else if (xx > 1.25 * Math.pow(core.Main.universe.resolution, 2) || yy > 1.25 * Math.pow(core.Main.universe.resolution, 2))
+		else if (xx > 1.25 * core.Main.universe.resolution || yy > 1.25 * core.Main.universe.resolution)
 			check = false;
 
 		return check;
@@ -70,7 +70,7 @@ public class SuperParticle {
 	public void checkForProximity(){
 		for (int i = 0; i < core.Main.universe.superParticle.size(); i++){
 			if (xx == core.Main.universe.superParticle.get(i).xx && yy == core.Main.universe.superParticle.get(i).yy) continue;
-			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 0.5){
+			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 0.25){
 				mass++;
 				core.Main.universe.superParticle.remove(i);
 			}

@@ -70,6 +70,7 @@ public class Universe {
 
 	public void initiateUniverse(){
 		runSimulation();
+		displayFinal();
 	}
 
 	public void createGalaxies(){
@@ -126,7 +127,7 @@ public class Universe {
 
 		for (int i = 0; i < superParticle.size(); i++){
 			if ((int) superParticle.get(i).xx >= resolution || (int) superParticle.get(i).yy >= resolution || (int) superParticle.get(i).xx < 0 || (int) superParticle.get(i).yy < 0) continue;
-			density[(int) superParticle.get(i).xx][(int) superParticle.get(i).yy]++;
+			density[(int) superParticle.get(i).xx][(int) superParticle.get(i).yy] += superParticle.get(i).mass;
 		}
 
 		double max = 0;
@@ -140,5 +141,9 @@ public class Universe {
 	}
 	private void display(){
 		new visual.UniverseDrawer(density);
+	}
+	private void displayFinal(){
+		System.out.println("Years run: " + universeAge * 1000000000);
+		System.out.println("Number of galaxies: " + superParticle.size());
 	}
 }
