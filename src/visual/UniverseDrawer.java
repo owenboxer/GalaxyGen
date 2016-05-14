@@ -33,7 +33,7 @@ public class UniverseDrawer {
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		for(int xx = 0; xx < density.length; xx++) {
 			for(int yy = 0; yy < density[xx].length; yy++) {
-				g.setColor(Color.getHSBColor((float)0.93, 1, (float)density[xx][yy]));
+				g.setColor(Color.getHSBColor((float)density[xx][yy], 1, (float)density[xx][yy]));
 				g.fillRect(xx * rectWidth, yy * rectHeight, rectWidth, rectHeight);
 			}
 		}

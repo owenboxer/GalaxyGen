@@ -107,12 +107,15 @@ public class Universe {
 		superParticle[1] = new structural.SuperParticle(36, 31);*/
 
 		for (long time = 0; time < 1000; time++){
-			for (int i = 0; i < superParticle.size(); i++){
+			for (int i = 0; i < superParticle.size(); i++)
 				superParticle.get(i).calcVector();
-			}
 			for (int i = 0; i < superParticle.size(); i++){
 				superParticle.get(i).moveParticle();
+				if (!superParticle.get(i).checkForScope())
+					superParticle.remove(i);
 			}
+			for (int i = 0; i < superParticle.size(); i++)
+				superParticle.get(i).checkForProximity();
 			convertToDensityArray();
 			display();
 		}
