@@ -11,6 +11,10 @@ public class Universe {
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
 
+	public int resolution = 750;
+	public double[][] density = new double[resolution][resolution];
+	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
+
 	public static chemistry.Element[] element = new chemistry.Element[94];
 
 	public String id;
@@ -85,5 +89,15 @@ public class Universe {
 		age = Function.exponentialFunction(0.9, age);
 		age = (age*1.1) + 2;
 		return age;
+	}
+
+	private void runSimulation(){
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++){
+				superParticle[xx][yy] = new structural.SuperParticle(xx, yy);
+			}
+	}
+	private void convertToDensityArray(){
+		
 	}
 }
