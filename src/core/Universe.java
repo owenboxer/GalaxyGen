@@ -13,7 +13,7 @@ public class Universe {
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
 
-	public int resolution = 50, timeInterval = 10000000;
+	public int resolution = util.Input.getN(), timeInterval = 10000000;
 	public double[][] density = new double[resolution][resolution];
 	public ArrayList<structural.SuperParticle> superParticle = new ArrayList<structural.SuperParticle>(0);
 
@@ -23,6 +23,7 @@ public class Universe {
 	public String packedData = "", dirPath;
 
 	public Universe(){
+		System.out.println(resolution);
 		id = getNewID();
 		dirPath = "res/saves/" + id;
 

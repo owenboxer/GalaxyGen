@@ -3,6 +3,7 @@ package util;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Scanner;
 
 import core.Main;
 import visual.GalaxyDrawer;
@@ -11,8 +12,19 @@ import visual.ImageHandler;
 public class Input extends KeyAdapter implements Runnable {
 	static int keyP;
 	static int keyR;
+	static int n;
+	
+	public static int getN(){
+		System.out.println("my n: ");
+		System.out.println(n);
+		return n;
+	}
 
-
+	public  static void inputGasClouds(){
+		Scanner reader = new Scanner (System.in);
+		System.out.println("Enter the number of gas clouds: ");
+		n = reader.nextInt();
+	}
 	public Input() {
 		Thread thread = new Thread(this);
 		thread.start();
