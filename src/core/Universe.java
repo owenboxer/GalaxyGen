@@ -11,7 +11,7 @@ public class Universe {
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
 
-	public int resolution = 750;
+	public int resolution = 100, timeInterval = 10000000;
 	public double[][] density = new double[resolution][resolution];
 	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
 
@@ -94,7 +94,8 @@ public class Universe {
 		double age = Main.getRandomDouble(1, 10); 
 		age = Function.exponentialFunction(0.9, age);
 		age = (age*1.1) + 2;
-		return age;
+		System.out.println(age);
+		return 0.001;//age;
 	}
 
 	private void runSimulation(){
@@ -102,6 +103,15 @@ public class Universe {
 			for (int yy = 0; yy < resolution; yy++){
 				superParticle[xx][yy] = new structural.SuperParticle(xx, yy);
 			}
+		
+		
+		
+		for (long time = 0; time < 2; time++){
+			for (int l = 0; l < resolution; l++)
+				for (int w = 0; w < resolution; w++)
+					superParticle[l][w].moveParticle();
+			
+		}
 	}
 	private void convertToDensityArray(){
 		for (int xx = 0; xx < resolution; xx++)
@@ -109,8 +119,10 @@ public class Universe {
 				density[xx][yy] = 0;
 
 		for (int l = 0; l < resolution; l++)
-			for (int w = 0; w < resolution; w++)
+			for (int w = 0; w < resolution; w++){
+				if ((int) superParticle[l][w].xx >= resolution || (int) superParticle[l][w].yy >= resolution || (int) superParticle[l][w].xx < 0 || (int) superParticle[l][w].yy < 0) continue;
 				density[(int) superParticle[l][w].xx][(int) superParticle[l][w].yy]++;
+			}
 
 		double max = 0;
 		for (int xx = 0; xx < resolution; xx++)
@@ -122,6 +134,10 @@ public class Universe {
 				density[xx][yy] /= max;
 	}
 	private void display(){
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				//System.out.println(superParticle[xx][yy].xx + ", " + superParticle[xx][yy].yy);
+		
 		new visual.UniverseDrawer(density);
 	}
 }

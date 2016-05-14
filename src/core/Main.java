@@ -12,7 +12,7 @@ public class Main {
 		universe.makeElements();
 
 		universe.initiateUniverse();
-		universe.createGalaxies();
+		//universe.createGalaxies();
 
 		//universe.saveUniverse();
 	}
