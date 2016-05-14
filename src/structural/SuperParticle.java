@@ -27,7 +27,7 @@ public class SuperParticle {
 	 * 
 	 * @return
 	 */
-	public double calcNewVector(){
+	public void calcNewVector(){
 		double magnitude2, direction2;
 		double[] polarCoord;
 		for (int l = 0; l < core.Main.universe.resolution; l++)
@@ -35,7 +35,7 @@ public class SuperParticle {
 				if (xx == core.Main.universe.superParticle[l][w].xx && yy == core.Main.universe.superParticle[l][w].yy) continue;
 
 				if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[l][w].xx, core.Main.universe.superParticle[l][w].yy) < 50){
-					polarCoord = (core.Main.universe.superParticle[l][w].xx - xx, core.Main.universe.superParticle[l][w].yy - yy);
+					polarCoord = core.Function.cartesianToPolar(core.Main.universe.superParticle[l][w].xx - xx, core.Main.universe.superParticle[l][w].yy - yy);
 					magnitude2 = (core.Main.universe.superParticle[l][w].magnitude * GRAVITATIONAL_CONSTANT) / Math.pow(polarCoord[1], 2);
 					direction2 = polarCoord[0];
 					direction = direction - direction2;

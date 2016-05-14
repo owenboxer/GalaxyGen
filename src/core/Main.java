@@ -6,6 +6,8 @@ public class Main {
 	public static Universe universe;
 	
 	public static void main(String[] args){
+		
+		
 		universe = new Universe();
 		universe.makeElements();
 
