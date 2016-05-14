@@ -10,18 +10,11 @@ public class Universe {
 
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
-<<<<<<< HEAD
-	
-	public int resolution = 750;
-	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
-	
-=======
 
 	public int resolution = 750;
 	public double[][] density = new double[resolution][resolution];
 	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
 
->>>>>>> 4b0959e1dd8f95b80a242504f47dfa9658c75ea8
 	public static chemistry.Element[] element = new chemistry.Element[94];
 
 	public String id;
@@ -76,7 +69,7 @@ public class Universe {
 	public void initiateUniverse(){
 		runSimulation();
 		convertToDensityArray();
-		display();
+		//display();
 	}
 
 	public void createGalaxies(){

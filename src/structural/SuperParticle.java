@@ -33,7 +33,7 @@ public class SuperParticle {
 			for (int w = 0; w < core.Main.universe.resolution; w++){
 				if (xx == core.Main.universe.superParticle[l][w].xx && yy == core.Main.universe.superParticle[l][w].yy) continue;
 
-				if (core.Function.distancEquation(xx, yy, core.Main.universe.superParticle[l][w].xx, core.Main.universe.superParticle[l][w].yy) < 50){
+				if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[l][w].xx, core.Main.universe.superParticle[l][w].yy) < 50){
 					polarCoord = (core.Main.universe.superParticle[l][w].xx - xx, core.Main.universe.superParticle[l][w].yy - yy);
 					magnitude2 = (core.Main.universe.superParticle[l][w].magnitude * GRAVITATIONAL_CONSTANT) / Math.pow(polarCoord[1], 2);
 					direction2 = polarCoord[0];
