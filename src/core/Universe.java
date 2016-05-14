@@ -10,7 +10,10 @@ public class Universe {
 
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
-
+	
+	public int resolution = 750;
+	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
+	
 	public static chemistry.Element[] element = new chemistry.Element[94];
 
 	public String id;
