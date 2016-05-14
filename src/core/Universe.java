@@ -11,9 +11,9 @@ public class Universe {
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
 
-	public int resolution = 100, timeInterval = 10000000;
+	public int resolution = 50, timeInterval = 10000000;
 	public double[][] density = new double[resolution][resolution];
-	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
+	public structural.SuperParticle superParticle[] = new structural.SuperParticle[resolution * resolution];
 
 	public static chemistry.Element[] element = new chemistry.Element[94];
 
@@ -68,8 +68,6 @@ public class Universe {
 
 	public void initiateUniverse(){
 		runSimulation();
-		convertToDensityArray();
-		display();
 	}
 
 	public void createGalaxies(){
@@ -99,18 +97,21 @@ public class Universe {
 	}
 
 	private void runSimulation(){
-		for (int xx = 0; xx < resolution; xx++)
-			for (int yy = 0; yy < resolution; yy++){
-				superParticle[xx][yy] = new structural.SuperParticle(xx, yy);
-			}
-		
-		
-		
-		for (long time = 0; time < 2; time++){
-			for (int l = 0; l < resolution; l++)
-				for (int w = 0; w < resolution; w++)
-					superParticle[l][w].moveParticle();
+		for (int i = 0; i < superParticle.length; i++)
+			superParticle[i] = new structural.SuperParticle(i / resolution, i % resolution);
 			
+		/*superParticle[0] = new structural.SuperParticle(30, 30);
+		superParticle[1] = new structural.SuperParticle(36, 31);*/
+
+		for (long time = 0; time < 1000; time++){
+			for (int i = 0; i < superParticle.length; i++){
+				superParticle[i].calcVector();
+			}
+			for (int i = 0; i < superParticle.length; i++){
+				superParticle[i].moveParticle();
+			}
+			convertToDensityArray();
+			display();
 		}
 	}
 	private void convertToDensityArray(){
@@ -118,11 +119,10 @@ public class Universe {
 			for (int yy = 0; yy < resolution; yy++)
 				density[xx][yy] = 0;
 
-		for (int l = 0; l < resolution; l++)
-			for (int w = 0; w < resolution; w++){
-				if ((int) superParticle[l][w].xx >= resolution || (int) superParticle[l][w].yy >= resolution || (int) superParticle[l][w].xx < 0 || (int) superParticle[l][w].yy < 0) continue;
-				density[(int) superParticle[l][w].xx][(int) superParticle[l][w].yy]++;
-			}
+		for (int i = 0; i < superParticle.length; i++){
+			if ((int) superParticle[i].xx >= resolution || (int) superParticle[i].yy >= resolution || (int) superParticle[i].xx < 0 || (int) superParticle[i].yy < 0) continue;
+			density[(int) superParticle[i].xx][(int) superParticle[i].yy]++;
+		}
 
 		double max = 0;
 		for (int xx = 0; xx < resolution; xx++)
@@ -134,10 +134,6 @@ public class Universe {
 				density[xx][yy] /= max;
 	}
 	private void display(){
-		for (int xx = 0; xx < resolution; xx++)
-			for (int yy = 0; yy < resolution; yy++)
-				//System.out.println(superParticle[xx][yy].xx + ", " + superParticle[xx][yy].yy);
-		
 		new visual.UniverseDrawer(density);
 	}
 }
