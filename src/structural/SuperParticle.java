@@ -41,7 +41,7 @@ public class SuperParticle {
 			if (xx == core.Main.universe.superParticle.get(i).xx && yy == core.Main.universe.superParticle.get(i).yy) continue;	
 			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 500){
 				//if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 10)
-					magnitude2 = GRAVITATIONAL_CONSTANT / Math.pow(FRICTION_CONSTANT * core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy), 2);
+					magnitude2 = (core.Main.universe.superParticle.get(i).mass * GRAVITATIONAL_CONSTANT) / Math.pow(FRICTION_CONSTANT * core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy), 2);
 				//else 
 					//magnitude2 = DARK_MATTER_CONSTANT / Math.pow(core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy), 2);
 				direction2 = Math.toDegrees(Math.acos((core.Main.universe.superParticle.get(i).xx - xx) / core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy)));
@@ -56,5 +56,24 @@ public class SuperParticle {
 	public void moveParticle(){
 		xx += vx;
 		yy += vy;
+	}
+	public boolean checkForScope(){
+		boolean check = true;
+
+		if (xx < 0 - (1.25 * Math.pow(core.Main.universe.resolution, 2)) || yy < 0 - (1.24 * Math.pow(core.Main.universe.resolution, 2)))
+			check = false;
+		else if (xx > 1.25 * Math.pow(core.Main.universe.resolution, 2) || yy > 1.25 * Math.pow(core.Main.universe.resolution, 2))
+			check = false;
+
+		return check;
+	}
+	public void checkForProximity(){
+		for (int i = 0; i < core.Main.universe.superParticle.size(); i++){
+			if (xx == core.Main.universe.superParticle.get(i).xx && yy == core.Main.universe.superParticle.get(i).yy) continue;
+			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 0.5){
+				mass++;
+				core.Main.universe.superParticle.remove(i);
+			}
+		}
 	}
 }
