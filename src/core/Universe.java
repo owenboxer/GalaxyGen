@@ -13,7 +13,7 @@ public class Universe {
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
 
-	public int resolution = 50, timeInterval = 10000000;
+	public int resolution = util.Input.getN(), timeInterval = 10000000;
 	public double[][] density = new double[resolution][resolution];
 	public ArrayList<structural.SuperParticle> superParticle = new ArrayList<structural.SuperParticle>(0);
 
@@ -95,8 +95,7 @@ public class Universe {
 		double age = Main.getRandomDouble(1, 10); 
 		age = Function.exponentialFunction(0.9, age);
 		age = (age*1.1) + 2;
-		System.out.println(age);
-		return 0.001;//age;
+		return age;
 	}
 
 	private void runSimulation(){
