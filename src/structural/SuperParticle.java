@@ -22,7 +22,7 @@ public class SuperParticle {
 	
 	private void genVector(){
 		direction = core.Main.getRandomDouble(0, 360);
-		magnitude = core.Function.gaussianDistribution(0.01, 0, core.Main.getRandomDouble(0, 1));
+		magnitude = core.Function.gaussianDistribution(0.1, 0, core.Main.getRandomDouble(0, 1));
 	}
 	/** @author Teddy @ calculating the vectors for attraction for to all other superparticles within 50 pixels. then combining 
 	 * the vectors to create the new direction and magnitude of the vector in the next stage of the model
