@@ -15,6 +15,7 @@ public class SuperParticle {
 	}
 
 	private void genVector(){
-		
+		direction = core.Main.getRandomDouble(0, 360);
+		magnitude = 1 - core.Function.gaussianDistribution(0.1, 0, core.Main.getRandomDouble(0, 1));
 	}
 }

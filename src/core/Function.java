@@ -117,4 +117,8 @@ public class Function {
 		double d = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 		return d;
 	}
+	public static double gaussianDistribution(double sig, double avg, double x){
+		double result = 1/(sig*Math.sqrt(2*Math.PI)) * Math.pow(Math.E, (-1*Math.pow(x-avg, 2)/2*Math.pow(sig, 2)));
+		return result;
+	}
 }

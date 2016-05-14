@@ -66,6 +66,12 @@ public class Universe {
 		universeAge = Double.valueOf(packedData).doubleValue();
 	}
 
+	public void initiateUniverse(){
+		runSimulation();
+		convertToDensityArray();
+		display();
+	}
+
 	public void createGalaxies(){
 		parentGalaxy = new galactic.Parent();
 		parentGalaxy.initiateGalaxy();
@@ -73,7 +79,7 @@ public class Universe {
 		if (!fromSave)
 			parentGalaxy.createSectors();
 
-		parentGalaxy.displayDensities();
+		//parentGalaxy.displayDensities();
 	}
 
 	public void makeElements(){
@@ -98,6 +104,24 @@ public class Universe {
 			}
 	}
 	private void convertToDensityArray(){
-		
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				density[xx][yy] = 0;
+
+		for (int l = 0; l < resolution; l++)
+			for (int w = 0; w < resolution; w++)
+				density[(int) superParticle[l][w].xx][(int) superParticle[l][w].yy]++;
+
+		double max = 0;
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				if (density[xx][yy] > max) max = density[xx][yy];
+
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				density[xx][yy] /= max;
+	}
+	private void display(){
+		new visual.UniverseDrawer(density);
 	}
 }
