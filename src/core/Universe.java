@@ -1,5 +1,7 @@
 package core;
 
+import java.util.ArrayList;
+
 import util.FileHandler;
 
 public class Universe {
@@ -13,7 +15,7 @@ public class Universe {
 
 	public int resolution = 50, timeInterval = 10000000;
 	public double[][] density = new double[resolution][resolution];
-	public structural.SuperParticle superParticle[] = new structural.SuperParticle[resolution * resolution];
+	public ArrayList<structural.SuperParticle> superParticle = new ArrayList<structural.SuperParticle>(0);
 
 	public static chemistry.Element[] element = new chemistry.Element[94];
 
@@ -97,18 +99,18 @@ public class Universe {
 	}
 
 	private void runSimulation(){
-		for (int i = 0; i < superParticle.length; i++)
-			superParticle[i] = new structural.SuperParticle(i / resolution, i % resolution);
+		for (int i = 0; i < Math.pow(resolution, 2); i++)
+			superParticle.add(new structural.SuperParticle(i / resolution, i % resolution));
 			
 		/*superParticle[0] = new structural.SuperParticle(30, 30);
 		superParticle[1] = new structural.SuperParticle(36, 31);*/
 
 		for (long time = 0; time < 1000; time++){
-			for (int i = 0; i < superParticle.length; i++){
-				superParticle[i].calcVector();
+			for (int i = 0; i < superParticle.size(); i++){
+				superParticle.get(i).calcVector();
 			}
-			for (int i = 0; i < superParticle.length; i++){
-				superParticle[i].moveParticle();
+			for (int i = 0; i < superParticle.size(); i++){
+				superParticle.get(i).moveParticle();
 			}
 			convertToDensityArray();
 			display();
@@ -119,9 +121,9 @@ public class Universe {
 			for (int yy = 0; yy < resolution; yy++)
 				density[xx][yy] = 0;
 
-		for (int i = 0; i < superParticle.length; i++){
-			if ((int) superParticle[i].xx >= resolution || (int) superParticle[i].yy >= resolution || (int) superParticle[i].xx < 0 || (int) superParticle[i].yy < 0) continue;
-			density[(int) superParticle[i].xx][(int) superParticle[i].yy]++;
+		for (int i = 0; i < superParticle.size(); i++){
+			if ((int) superParticle.get(i).xx >= resolution || (int) superParticle.get(i).yy >= resolution || (int) superParticle.get(i).xx < 0 || (int) superParticle.get(i).yy < 0) continue;
+			density[(int) superParticle.get(i).xx][(int) superParticle.get(i).yy]++;
 		}
 
 		double max = 0;

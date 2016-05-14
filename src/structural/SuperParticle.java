@@ -3,7 +3,7 @@ package structural;
 public class SuperParticle {
 	public double xx, yy, vx, vy;
 	public double direction, magnitude;
-	public double mass;
+	public double mass = 1;
 
 	public final static double GRAVITATIONAL_CONSTANT = 0.2, FRICTION_CONSTANT = 1,
 			EXPANSION_CONSTANT = 10;
@@ -37,15 +37,15 @@ public class SuperParticle {
 		vx += cartesian[0];
 		vy += cartesian[1];
 
-		for (int i = 0; i < core.Main.universe.superParticle.length; i++){
-			if (xx == core.Main.universe.superParticle[i].xx && yy == core.Main.universe.superParticle[i].yy) continue;	
-			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[i].xx, core.Main.universe.superParticle[i].yy) < 500){
-				//if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[i].xx, core.Main.universe.superParticle[i].yy) < 10)
-					magnitude2 = GRAVITATIONAL_CONSTANT / Math.pow(FRICTION_CONSTANT * core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[i].xx, core.Main.universe.superParticle[i].yy), 2);
+		for (int i = 0; i < core.Main.universe.superParticle.size(); i++){
+			if (xx == core.Main.universe.superParticle.get(i).xx && yy == core.Main.universe.superParticle.get(i).yy) continue;	
+			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 500){
+				//if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 10)
+					magnitude2 = GRAVITATIONAL_CONSTANT / Math.pow(FRICTION_CONSTANT * core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy), 2);
 				//else 
-					//magnitude2 = DARK_MATTER_CONSTANT / Math.pow(core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[i].xx, core.Main.universe.superParticle[i].yy), 2);
-				direction2 = Math.toDegrees(Math.acos((core.Main.universe.superParticle[i].xx - xx) / core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[i].xx, core.Main.universe.superParticle[i].yy)));
-				if (yy > core.Main.universe.superParticle[i].yy) direction2 = (-1 * direction2) + 360;
+					//magnitude2 = DARK_MATTER_CONSTANT / Math.pow(core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy), 2);
+				direction2 = Math.toDegrees(Math.acos((core.Main.universe.superParticle.get(i).xx - xx) / core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy)));
+				if (yy > core.Main.universe.superParticle.get(i).yy) direction2 = (-1 * direction2) + 360;
 				cartesian = core.Function.polarToCartesian(direction2, magnitude2);
 				vx += cartesian[0];
 				vy += cartesian[1];
