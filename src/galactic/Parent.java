@@ -523,7 +523,7 @@ public class Parent extends Galaxy {
 		return numSat;
 	}
 	public int calcBarSize() {
-		return 0;//core.Main.getRandomInt(0, 2);
+		return core.Main.getRandomInt(0, 2);
 	}
 	public int calcGrade() {
 		return core.Main.getRandomInt(0, 5);
