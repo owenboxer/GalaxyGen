@@ -22,7 +22,8 @@ public class SuperParticle {
 		direction = core.Main.getRandomDouble(0, 360);
 		magnitude = 1 - core.Function.gaussianDistribution(0.1, 0, core.Main.getRandomDouble(0, 1));
 	}
-	/** @author Teddy @ calculating the vectors for attraction for to all other superparticles within 50 pixels. then combining the vectors to create the new direction and magnitude of the vector in the next stage.
+	/** @author Teddy @ calculating the vectors for attraction for to all other superparticles within 50 pixels. then combining 
+	 * the vectors to create the new direction and magnitude of the vector in the next stage of the model
 	 * 
 	 * @return
 	 */
@@ -33,11 +34,19 @@ public class SuperParticle {
 			for (int w = 0; w < core.Main.universe.resolution; w++){
 				if (xx == core.Main.universe.superParticle[l][w].xx && yy == core.Main.universe.superParticle[l][w].yy) continue;
 
-				if (core.Function.distancEquation(xx, yy, core.Main.universe.superParticle[l][w].xx, core.Main.universe.superParticle[l][w].yy) < 50){
+				if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle[l][w].xx, core.Main.universe.superParticle[l][w].yy) < 50){
 					polarCoord = (core.Main.universe.superParticle[l][w].xx - xx, core.Main.universe.superParticle[l][w].yy - yy);
 					magnitude2 = (core.Main.universe.superParticle[l][w].magnitude * GRAVITATIONAL_CONSTANT) / Math.pow(polarCoord[1], 2);
 					direction2 = polarCoord[0];
-					
+					direction = direction - direction2;
+					if (direction < 0){
+						direction = direction + 360;
+					}
+					else if (direction > 180){
+						direction = (360 - direction) * -1;
+					}
+					magnitude = Math.sqrt(Math.pow(magnitude, 2) + Math.pow(magnitude2, 2) - (magnitude * magnitude2 * 2 * Math.cos(Math.toDegrees(direction))));
+
 				}
 						
 			}
