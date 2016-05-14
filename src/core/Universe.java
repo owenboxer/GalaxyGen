@@ -10,10 +10,18 @@ public class Universe {
 
 	public galactic.Parent parentGalaxy;
 	public galactic.Satellite satelliteGalaxy[];
+<<<<<<< HEAD
 	
 	public int resolution = 750;
 	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
 	
+=======
+
+	public int resolution = 750;
+	public double[][] density = new double[resolution][resolution];
+	public structural.SuperParticle superParticle[][] = new structural.SuperParticle[resolution][resolution];
+
+>>>>>>> 4b0959e1dd8f95b80a242504f47dfa9658c75ea8
 	public static chemistry.Element[] element = new chemistry.Element[94];
 
 	public String id;
@@ -65,6 +73,12 @@ public class Universe {
 		universeAge = Double.valueOf(packedData).doubleValue();
 	}
 
+	public void initiateUniverse(){
+		runSimulation();
+		convertToDensityArray();
+		display();
+	}
+
 	public void createGalaxies(){
 		parentGalaxy = new galactic.Parent();
 		parentGalaxy.initiateGalaxy();
@@ -72,7 +86,7 @@ public class Universe {
 		if (!fromSave)
 			parentGalaxy.createSectors();
 
-		parentGalaxy.displayDensities();
+		//parentGalaxy.displayDensities();
 	}
 
 	public void makeElements(){
@@ -88,5 +102,33 @@ public class Universe {
 		age = Function.exponentialFunction(0.9, age);
 		age = (age*1.1) + 2;
 		return age;
+	}
+
+	private void runSimulation(){
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++){
+				superParticle[xx][yy] = new structural.SuperParticle(xx, yy);
+			}
+	}
+	private void convertToDensityArray(){
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				density[xx][yy] = 0;
+
+		for (int l = 0; l < resolution; l++)
+			for (int w = 0; w < resolution; w++)
+				density[(int) superParticle[l][w].xx][(int) superParticle[l][w].yy]++;
+
+		double max = 0;
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				if (density[xx][yy] > max) max = density[xx][yy];
+
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				density[xx][yy] /= max;
+	}
+	private void display(){
+		new visual.UniverseDrawer(density);
 	}
 }

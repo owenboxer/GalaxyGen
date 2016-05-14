@@ -89,9 +89,6 @@ public class GalaxyDrawer {
 			for(int yy = 0; yy < density[xx].length; yy++) {
 				g.setColor(Color.getHSBColor((float)0.93, (float)ionizedGas[xx][yy], (float)density[xx][yy] / 10));
 				g.fillRect(xx * rectWidth, yy * rectHeight, rectWidth, rectHeight);
-				//g.setColor(Color.BLUE);
-				//g.drawString(Integer.toString(density[xx][yy]), xx * rectWidth, (yy + 1) * rectHeight);
-				
 			}
 		}
 	}
