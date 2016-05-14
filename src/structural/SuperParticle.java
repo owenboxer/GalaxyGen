@@ -5,7 +5,7 @@ public class SuperParticle {
 	public double direction, magnitude;
 	public double mass;
 
-	public final static double GRAVITATIONAL_CONSTANT = 1000000,
+	public final static double GRAVITATIONAL_CONSTANT = 1,
 			EXPANSION_CONSTANT = 1, SPEED_OF_LIGHT = 1;
 
 	public SuperParticle(int xx, int yy){
@@ -14,7 +14,7 @@ public class SuperParticle {
 		
 		genVector();
 		
-		System.out.println("v: " + magnitude);
+		//System.out.println("v: " + magnitude);
 	}
 
 	
@@ -22,7 +22,7 @@ public class SuperParticle {
 	
 	private void genVector(){
 		direction = core.Main.getRandomDouble(0, 360);
-		magnitude = core.Function.gaussianDistribution(0.1, 0, core.Main.getRandomDouble(0, 1));
+		magnitude = core.Function.gaussianDistribution(0.1, 0, core.Main.getRandomDouble(0, 1)) / 4;
 	}
 	/** @author Teddy @ calculating the vectors for attraction for to all other superparticles within 50 pixels. then combining 
 	 * the vectors to create the new direction and magnitude of the vector in the next stage of the model
@@ -46,7 +46,8 @@ public class SuperParticle {
 					else if (direction > 180){
 						direction = (360 - direction) * -1;
 					}
-					magnitude = 1;//Math.sqrt(Math.pow(magnitude, 2) + Math.pow(magnitude2, 2) - (magnitude * magnitude2 * 2 * Math.cos(Math.toDegrees(direction))));
+					magnitude = Math.sqrt(Math.pow(magnitude, 2) + Math.pow(magnitude2, 2) - (magnitude * magnitude2 * 2 * Math.cos(Math.toDegrees(direction))));
+					//System.out.println("v: " + magnitude);
 				}			
 			}		
 	}
