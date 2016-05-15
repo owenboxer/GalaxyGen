@@ -6,14 +6,16 @@ import java.awt.image.BufferedImage;
 
 public class UniverseDrawer {
 	public static BufferedImage image;
-	final int rectWidth = 15;
-	final int rectHeight = 15;
+	int rectWidth, rectHeight;
 	public static Window window = null;
 
 	public static String message = "";// DEBUG/UTILITY ONLY
 
 
-	public UniverseDrawer(double[][] density) {
+	public UniverseDrawer(double[][] density, int resolution) {
+		rectWidth = 750 / resolution;
+		rectHeight = 750 / resolution;
+
 		image = new BufferedImage(density.length * rectWidth,density[0].length * rectHeight,
 				BufferedImage.TYPE_INT_ARGB);
 		BufferedImage background = new BufferedImage(image.getWidth(),image.getHeight(),

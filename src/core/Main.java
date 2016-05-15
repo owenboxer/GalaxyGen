@@ -16,6 +16,8 @@ public class Main {
 
 		if (save) universe.saveUniverse();
 		else universe.deleteAll();
+
+		System.exit(0);
 	}
 
 	public static boolean changeValue(boolean original){

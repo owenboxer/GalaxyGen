@@ -67,7 +67,13 @@ public class FileHandler {
 	}
 	public static void deleteFile(String path){
 		File file = new File(path);
-		file.delete();
+		if (file.isDirectory()){
+			File[] subFile = file.listFiles();
+			for (int i = 0; i < subFile.length; i++)
+				deleteFile(subFile[i].getPath());
+			file.delete();
+		}
+		else file.delete();
 	}
 
 	public static void makeDirectory(String path){

@@ -69,9 +69,12 @@ public class SuperParticle {
 	}
 	public void checkForProximity(){
 		for (int i = 0; i < core.Main.universe.superParticle.size(); i++){
-			if (xx == core.Main.universe.superParticle.get(i).xx && yy == core.Main.universe.superParticle.get(i).yy) continue;
-			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, core.Main.universe.superParticle.get(i).yy) < 0.25){
-				mass++;
+			if (xx == core.Main.universe.superParticle.get(i).xx && yy == core.Main.universe.superParticle
+					.get(i).yy)
+				continue;
+			if (core.Function.distanceEquation(xx, yy, core.Main.universe.superParticle.get(i).xx, 
+					core.Main.universe.superParticle.get(i).yy) < 0.5){
+				mass += core.Main.universe.superParticle.get(i).mass;
 				core.Main.universe.superParticle.remove(i);
 			}
 		}

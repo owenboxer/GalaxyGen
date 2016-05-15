@@ -1,6 +1,8 @@
 package visual;
-import java.awt.image.BufferedImage;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,7 +18,7 @@ public class Window {
 	public Window(BufferedImage img) {
 		this.img = img;
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		frame.addWindowListener(new FrameListener());
 	    frame.setResizable(true);
 		frame.setFocusable(true);
 	    
@@ -38,5 +40,12 @@ public class Window {
 		label = new JLabel(icon);
 		frame.add(label);
 		frame.pack();
+	}
+}
+
+class FrameListener extends WindowAdapter {
+	public void windowClosing(WindowEvent e) {
+		core.Main.universe.deleteAll();
+		System.exit(0);
 	}
 }

@@ -7,7 +7,7 @@ import util.FileHandler;
 public class Universe {
 	public boolean fromSave = false;
 	public boolean saveForAnimation = true;
-	int frame = 0;
+	int frame = 0, maxDensity = 0;
 
 	//TODO: Add satellite galaxies
 	public double universeAge;
@@ -69,8 +69,13 @@ public class Universe {
 	private void unpackData(){
 		universeAge = Double.valueOf(packedData).doubleValue();
 	}
+	public void deleteAll(){
+		util.FileHandler.deleteFile(dirPath);
+	}
 
 	public void initiateUniverse(){
+		maxDensity = 0;
+
 		if (saveForAnimation) util.FileHandler.makeDirectory(dirPath + "/animation"); 
 
 		runSimulation();
@@ -101,10 +106,25 @@ public class Universe {
 	public double calcUniverseAge(){
 		double age = Main.getRandomDouble(1, 10); 
 		age = Function.exponentialFunction(0.9, age);
-		age = (age*1.1) + 2;
+		age = (age * 1.1) + 2;
 		return age;
 	}
 
+	/**@author owencarter @ This simulation functions in three stages.
+	 * Stage I: "Super particles" (points that are representative of large clouds of gas) begin evenly 
+	 * distributed across the screen a square shape. There particles are assigned random vectors with no bias
+	 * to direction but a heavy bias on magnitude towards 0, using a Gaussian distribution. This random
+	 * element, though not emulating quantum fluctuations in reality, has the same results in that certain
+	 * regions of the universe will have higher densities than others, and the outcome of the program varies
+	 * between iterations. If these random vectors were consistent, then the simulation would most likely
+	 * produce the exact same results every single time. In addition to vectors and positions being assigned 
+	 * to each particle, a mass of 1 is also given to each particle.
+	 * Stage II: After their initial setting, each particle then is acted upon by the gravitational force
+	 * between it and all other particles. This is a very time consuming operation, and therefore some 
+	 * shortcuts must be taken to speed up the simulation time. The amount of time between each calculation is
+	 * significant, apx. 10000000 years. This means that particles that approach closely may be flung out of 
+	 * the scope of the simulation before being pulled back by the particle they were close to. 
+	 */
 	private void runSimulation(){
 		for (int i = 0; i < Math.pow(resolution, 2); i++)
 			superParticle.add(new structural.SuperParticle(i / resolution, i % resolution));
@@ -139,14 +159,15 @@ public class Universe {
 				density[xx][yy] = 0;
 
 		for (int i = 0; i < superParticle.size(); i++){
-			if ((int) superParticle.get(i).xx >= resolution || (int) superParticle.get(i).yy >= resolution || (int) superParticle.get(i).xx < 0 || (int) superParticle.get(i).yy < 0) continue;
+			if ((int) superParticle.get(i).xx >= resolution || (int) superParticle.get(i).yy >= resolution ||
+					(int) superParticle.get(i).xx < 0 || (int) superParticle.get(i).yy < 0) 
+				continue;
 			density[(int) superParticle.get(i).xx][(int) superParticle.get(i).yy] += superParticle.get(i).mass;
 		}
 
 		for (int xx = 0; xx < resolution; xx++)
 			for (int yy = 0; yy < resolution; yy++){
-				density[xx][yy] /= 20;
-				if (density[xx][yy] > 1) density[xx][yy] = 1;
+				if (density[xx][yy] > maxDensity) maxDensity = (int) density[xx][yy];
 			}
 	}
 	private void saveDensityArray(int frame){
@@ -163,10 +184,11 @@ public class Universe {
 
 		for (int xx = 0; xx < resolution; xx++)
 			for (int yy = 0; yy < resolution; yy++)
-				density[xx][yy] = Double.valueOf(packedDensity[xx * resolution + yy]).doubleValue();
+				density[xx][yy] = Double.valueOf(packedDensity[xx * resolution + yy]).doubleValue() / 
+									(double) maxDensity;
 	}
 	private void display(){
-		new visual.UniverseDrawer(density);
+		new visual.UniverseDrawer(density, resolution);
 	}
 	private void displayFinal(){
 		System.out.println("Years run: " + universeAge * 1000000000);
@@ -177,6 +199,11 @@ public class Universe {
 			readDensityArray(i);
 			display();
 			util.FileHandler.deleteFile(dirPath + "/animation/frame" + i);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}	
 		util.FileHandler.deleteFile(dirPath + "/animation");
 	}
