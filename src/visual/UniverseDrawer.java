@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 public class UniverseDrawer {
 	public static BufferedImage image;
-	final int rectWidth = 7;
-	final int rectHeight = 7;
+	final int rectWidth = 15;
+	final int rectHeight = 15;
 	public static Window window = null;
 
 	public static String message = "";// DEBUG/UTILITY ONLY

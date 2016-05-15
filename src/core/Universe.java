@@ -6,6 +6,8 @@ import util.FileHandler;
 
 public class Universe {
 	public boolean fromSave = false;
+	public boolean saveForAnimation = true;
+	int frame = 0;
 
 	//TODO: Add satellite galaxies
 	public double universeAge;
@@ -69,8 +71,13 @@ public class Universe {
 	}
 
 	public void initiateUniverse(){
+		if (saveForAnimation) util.FileHandler.makeDirectory(dirPath + "/animation"); 
+
 		runSimulation();
 		displayFinal();
+
+		if (saveForAnimation)
+			displayAnimation();
 	}
 
 	public void createGalaxies(){
@@ -101,11 +108,11 @@ public class Universe {
 	private void runSimulation(){
 		for (int i = 0; i < Math.pow(resolution, 2); i++)
 			superParticle.add(new structural.SuperParticle(i / resolution, i % resolution));
-			
+
 		/*superParticle[0] = new structural.SuperParticle(30, 30);
 		superParticle[1] = new structural.SuperParticle(36, 31);*/
 
-		for (long time = 0; time < 1000; time++){
+		for (long time = 0; time < universeAge * 1000000000; time += timeInterval){
 			for (int i = 0; i < superParticle.size(); i++)
 				superParticle.get(i).calcVector();
 			for (int i = 0; i < superParticle.size(); i++){
@@ -116,9 +123,16 @@ public class Universe {
 			for (int i = 0; i < superParticle.size(); i++)
 				superParticle.get(i).checkForProximity();
 			convertToDensityArray();
-			display();
+
+			if (saveForAnimation){
+				saveDensityArray(frame);
+				System.out.println((int) (time / (universeAge * 10000000)) + "% Complete");
+				frame++;
+			}
+			else display();
 		}
 	}
+
 	private void convertToDensityArray(){
 		for (int xx = 0; xx < resolution; xx++)
 			for (int yy = 0; yy < resolution; yy++)
@@ -129,14 +143,27 @@ public class Universe {
 			density[(int) superParticle.get(i).xx][(int) superParticle.get(i).yy] += superParticle.get(i).mass;
 		}
 
-		double max = 0;
 		for (int xx = 0; xx < resolution; xx++)
-			for (int yy = 0; yy < resolution; yy++)
-				if (density[xx][yy] > max) max = density[xx][yy];
+			for (int yy = 0; yy < resolution; yy++){
+				density[xx][yy] /= 20;
+				if (density[xx][yy] > 1) density[xx][yy] = 1;
+			}
+	}
+	private void saveDensityArray(int frame){
+		String[] packedDensity = new String[density.length * density[0].length];
 
 		for (int xx = 0; xx < resolution; xx++)
 			for (int yy = 0; yy < resolution; yy++)
-				density[xx][yy] /= max;
+				packedDensity[xx * resolution + yy] = density[xx][yy] + "";
+
+		util.FileHandler.writeToFile(packedDensity, dirPath + "/animation/frame" + frame);
+	}
+	private void readDensityArray(int frame){
+		String[] packedDensity = util.FileHandler.readFile(dirPath + "/animation/frame" + frame);
+
+		for (int xx = 0; xx < resolution; xx++)
+			for (int yy = 0; yy < resolution; yy++)
+				density[xx][yy] = Double.valueOf(packedDensity[xx * resolution + yy]).doubleValue();
 	}
 	private void display(){
 		new visual.UniverseDrawer(density);
@@ -144,5 +171,13 @@ public class Universe {
 	private void displayFinal(){
 		System.out.println("Years run: " + universeAge * 1000000000);
 		System.out.println("Number of galaxies: " + superParticle.size());
+	}
+	private void displayAnimation(){
+		for (int i = 0; i < frame; i++){
+			readDensityArray(i);
+			display();
+			util.FileHandler.deleteFile(dirPath + "/animation/frame" + i);
+		}	
+		util.FileHandler.deleteFile(dirPath + "/animation");
 	}
 }
