@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class Main {
 	public static Universe universe;
+	private static boolean save = false;
 	
 	public static void main(String[] args){
 		util.Input.inputGasClouds();
@@ -13,7 +14,8 @@ public class Main {
 		universe.initiateUniverse();
 		//universe.createGalaxies();
 
-		//universe.saveUniverse();
+		if (save) universe.saveUniverse();
+		else universe.deleteAll();
 	}
 
 	public static boolean changeValue(boolean original){
