@@ -30,30 +30,6 @@ public class FileHandler {
 		
 		return data;
 	}
-	public static String[] readFile(String path, int lineMin, int lineMax){
-		int lineNumber = 0, pointNumber = 0;
-		String[] dataPoint = new String[lineMax - lineMin];
-
-		try{
-			BufferedReader in = new BufferedReader(new FileReader(path));
-
-			String line = null;
-			while ((line = in.readLine()) != null){
-				if (lineNumber >= lineMin && lineNumber < lineMax){
-					dataPoint[pointNumber] = line;
-					pointNumber++;
-				}
-				if (lineNumber >= lineMax) break;
-				lineNumber++;
-			}
-
-			in.close();
-		} catch (IOException ex){
-			System.err.println(ex);
-		}
-
-		return dataPoint;
-	}
 	public static void writeToFile(String[] newDataPoint, String path){
 		try{
 			PrintWriter out = new PrintWriter(path);

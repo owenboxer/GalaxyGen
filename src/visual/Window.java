@@ -28,9 +28,8 @@ public class Window {
 		frame.pack();
 		frame.setVisible(true);
 		frame.addKeyListener(new Input());
-		frame.addWindowListener(new FrameListener());
 	}
-
+	
 	public void close() {
 		frame.dispose();
 	}

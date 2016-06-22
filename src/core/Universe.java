@@ -1,13 +1,16 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import util.FileHandler;
 
 public class Universe {
 	public boolean fromSave = false;
+
 	public boolean saveForAnimation = true;
 	int frame = 0, maxDensity = 0;
+	int reference = 0;
 
 	//TODO: Add satellite galaxies
 	public double universeAge;
@@ -129,19 +132,68 @@ public class Universe {
 		for (int i = 0; i < Math.pow(resolution, 2); i++)
 			superParticle.add(new structural.SuperParticle(i / resolution, i % resolution));
 
+		int maxMass = 0, size;
+		
+		for (int i = 0; i < superParticle.size(); i++)
+			if (superParticle.get(i).checkForProximity(i) && superParticle.get(i).mass > maxMass){
+					maxMass = (int) superParticle.get(i).mass;
+					superParticle.get(reference).reference = false;
+					reference = i;
+					superParticle.get(reference).reference = true;
+			}
+
+		size = superParticle.size() - 1;
+		while (size >= 0) {
+			if (superParticle.get(size).delete){
+				superParticle.remove(size);
+				size--;
+			}
+			size--;
+		}
+
 		/*superParticle[0] = new structural.SuperParticle(30, 30);
 		superParticle[1] = new structural.SuperParticle(36, 31);*/
 
+		double xTransformation, yTransformation;
+
 		for (long time = 0; time < universeAge * 1000000000; time += timeInterval){
+			maxMass = 0; //used to decide upon which particle to follow
+
+			//calculates the new vector for each superParticle
 			for (int i = 0; i < superParticle.size(); i++)
-				superParticle.get(i).calcVector();
-			for (int i = 0; i < superParticle.size(); i++){
+				superParticle.get(i).calcVector(i);
+
+			//moves each superPartcle according to its vector
+			for (int i = 0; i < superParticle.size(); i++)
 				superParticle.get(i).moveParticle();
-				if (!superParticle.get(i).checkForScope())
-					superParticle.remove(i);
-			}
+
+			//combines particles that are within a certain proximity of each other, then finds the most massive
+			//superParticle
 			for (int i = 0; i < superParticle.size(); i++)
-				superParticle.get(i).checkForProximity();
+				superParticle.get(i).checkForProximity(i);
+
+			//transforms the coordinates of each superParticle in order to "follow" the most massive one, then
+			//deletes particles that have fallen out of scope
+			for (int i = 0; i < superParticle.size(); i++){
+				if (superParticle.get(i).reference){
+					superParticle.get(reference).reference = false;
+					reference = i;
+					superParticle.get(reference).reference = true;
+				}
+
+				//if (!superParticle.get(i).checkForScope())
+					//superParticle.get(i).delete = true;
+			}
+
+			//performs removal of marked superParticles
+			size = superParticle.size() - 1;
+			while (size >= 0) {
+				if (superParticle.get(size).delete)
+					superParticle.remove(size);
+				size--;
+			}
+			for (int i = 0; i < superParticle.size(); i++) if (superParticle.get(i).delete) System.err.println(i);
+
 			convertToDensityArray();
 
 			if (saveForAnimation){
